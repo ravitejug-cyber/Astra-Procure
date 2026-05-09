@@ -113,20 +113,13 @@ export function FileUploader({ files, onChange }: FileUploaderProps) {
       {files.length > 0 && (
         <ul className="space-y-2">
           {files.map((f, i) => (
-            <li
-              key={i}
-              className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2"
-            >
+            <li key={i} className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2">
               {fileIcon(f.type)}
               <div className="flex-1 min-w-0">
                 <p className="truncate text-sm text-slate-700 font-medium">{f.name}</p>
                 <p className="text-xs text-slate-400">{formatFileSize(f.size)}</p>
               </div>
-              <button
-                onClick={() => remove(i)}
-                className="text-slate-300 hover:text-red-400 transition-colors"
-                type="button"
-              >
+              <button onClick={() => remove(i)} className="text-slate-300 hover:text-red-400 transition-colors" type="button">
                 <X className="h-4 w-4" />
               </button>
             </li>

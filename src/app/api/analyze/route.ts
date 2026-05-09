@@ -39,7 +39,6 @@ Respond ONLY with raw JSON matching the specified format. No markdown fences, no
         source: { type: "base64", media_type: "application/pdf", data: base64 },
       } as Messages.DocumentBlockParam);
     }
-    // DXF/STEP files are text-based; passed via file name in the text prompt
   }
 
   const content: Messages.ContentBlockParam[] = [
@@ -52,10 +51,8 @@ Respond ONLY with raw JSON matching the specified format. No markdown fences, no
 }
 
 function parseCostingResult(raw: string): CostingResult {
-  // Strip potential markdown fences if model wraps despite instructions
   const cleaned = raw.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/i, "").trim();
   const parsed = JSON.parse(cleaned);
-
   return {
     partSummary: parsed.partSummary ?? {},
     costBreakdown: Array.isArray(parsed.costBreakdown) ? parsed.costBreakdown : [],
@@ -71,23 +68,19 @@ function parseCostingResult(raw: string): CostingResult {
 export async function POST(request: NextRequest) {
   try {
     const body: AnalyzeRequest = await request.json();
-
     if (!body.files || body.files.length === 0) {
       return NextResponse.json({ error: "No files provided." }, { status: 400 });
     }
-
     const message = await client.messages.create({
       model: "claude-sonnet-4-6",
       max_tokens: 4096,
       system: SYSTEM_PROMPT,
       messages: [buildUserMessage(body)],
     });
-
     const rawText = message.content
       .filter((b) => b.type === "text")
       .map((b) => (b as Anthropic.TextBlock).text)
       .join("");
-
     const result = parseCostingResult(rawText);
     return NextResponse.json({ result });
   } catch (err) {

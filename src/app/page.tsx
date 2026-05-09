@@ -84,7 +84,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      {/* Header */}
       <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur-sm shadow-sm">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
           <div className="flex items-center gap-3">
@@ -128,7 +127,6 @@ export default function Home() {
       <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
         {activeTab === "analyze" && (
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-            {/* Left panel */}
             <div className="lg:col-span-1 space-y-4">
               <Card>
                 <CardHeader>
@@ -194,7 +192,6 @@ export default function Home() {
               </Card>
             </div>
 
-            {/* Right panel */}
             <div className="lg:col-span-2">
               {loading && (
                 <div className="flex flex-col items-center justify-center gap-5 rounded-2xl border border-slate-200 bg-white py-24 shadow-sm">
