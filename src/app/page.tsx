@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { BarChart3, History, Loader2, LogOut, Send, Zap } from "lucide-react";
+import { BarChart3, History, Loader2, Send, Zap } from "lucide-react";
 import { FileUploader } from "@/components/FileUploader";
 import { CostingResult } from "@/components/CostingResult";
 import { ProjectHistory } from "@/components/ProjectHistory";
@@ -69,11 +69,6 @@ export default function Home() {
     }
   };
 
-  const handleLogout = async () => {
-    await fetch("/api/auth/logout", { method: "POST" });
-    window.location.href = "/login";
-  };
-
   const handleSelectHistory = (entry: ProjectEntry) => {
     setResult(entry.result);
     setRegion(entry.region);
@@ -100,27 +95,21 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            <nav className="flex gap-1 mr-2">
-              {(["analyze", "history"] as Tab[]).map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all capitalize
-                    ${activeTab === tab
-                      ? "bg-blue-50 text-blue-700 shadow-sm"
-                      : "text-slate-500 hover:text-slate-800 hover:bg-slate-100"}`}
-                >
-                  {tab === "analyze" ? <BarChart3 className="h-3.5 w-3.5" /> : <History className="h-3.5 w-3.5" />}
-                  {tab}
-                </button>
-              ))}
-            </nav>
-            <Button variant="ghost" size="sm" onClick={handleLogout} className="text-slate-500 hover:text-red-600 hover:bg-red-50 text-xs">
-              <LogOut className="h-3.5 w-3.5" />
-              <span className="hidden sm:inline">Sign out</span>
-            </Button>
-          </div>
+          <nav className="flex gap-1">
+            {(["analyze", "history"] as Tab[]).map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all capitalize
+                  ${activeTab === tab
+                    ? "bg-blue-50 text-blue-700 shadow-sm"
+                    : "text-slate-500 hover:text-slate-800 hover:bg-slate-100"}`}
+              >
+                {tab === "analyze" ? <BarChart3 className="h-3.5 w-3.5" /> : <History className="h-3.5 w-3.5" />}
+                {tab}
+              </button>
+            ))}
+          </nav>
         </div>
       </header>
 
