@@ -5,9 +5,47 @@ import type { DiscoveryRequest, Vendor, VendorDiscoveryResult } from "@/lib/vend
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
+function repairTruncatedJson(raw: string): string {
+  // Strip markdown fences
+  let s = raw.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/i, "").trim();
+
+  try {
+    JSON.parse(s);
+    return s; // Already valid
+  } catch {
+    // Try closing any open arrays/objects by tracking bracket depth
+    const opens: string[] = [];
+    let inString = false;
+    let escape = false;
+
+    for (let i = 0; i < s.length; i++) {
+      const ch = s[i];
+      if (escape) { escape = false; continue; }
+      if (ch === "\\" && inString) { escape = true; continue; }
+      if (ch === '"') { inString = !inString; continue; }
+      if (inString) continue;
+      if (ch === "{" || ch === "[") opens.push(ch);
+      else if (ch === "}" || ch === "]") opens.pop();
+    }
+
+    // If we're inside a string, cut back to the last complete key-value pair
+    if (inString) {
+      const lastComma = s.lastIndexOf(",");
+      if (lastComma > 0) s = s.slice(0, lastComma);
+    }
+
+    // Close all open brackets in reverse order
+    for (let i = opens.length - 1; i >= 0; i--) {
+      s += opens[i] === "{" ? "}" : "]";
+    }
+
+    return s;
+  }
+}
+
 function parseVendorResult(raw: string): VendorDiscoveryResult {
-  const cleaned = raw.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/i, "").trim();
-  const parsed = JSON.parse(cleaned);
+  const repaired = repairTruncatedJson(raw);
+  const parsed = JSON.parse(repaired);
   return {
     matches: Array.isArray(parsed.matches) ? parsed.matches : [],
     sourcingRisks: Array.isArray(parsed.sourcingRisks) ? parsed.sourcingRisks : [],
@@ -39,7 +77,7 @@ export async function POST(req: NextRequest) {
 
     const message = await client.messages.create({
       model: "claude-sonnet-4-6",
-      max_tokens: 4096,
+      max_tokens: 8192,
       system: systemPrompt,
       messages: [
         {

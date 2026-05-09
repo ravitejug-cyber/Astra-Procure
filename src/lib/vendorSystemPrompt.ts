@@ -14,7 +14,7 @@ PART REQUIREMENTS:
 - Target Region: ${req.region}
 
 YOUR TASK:
-Generate a comprehensive vendor discovery result with 6-8 realistic Indian manufacturers well-suited for these requirements. Use your deep knowledge of the Indian manufacturing ecosystem to create highly realistic, plausible vendor profiles.
+Generate a vendor discovery result with 5-6 realistic Indian manufacturers well-suited for these requirements. Use your deep knowledge of the Indian manufacturing ecosystem to create highly realistic, plausible vendor profiles. Keep each string field concise (under 120 characters). Strategy fields (rfqStrategy, prototypeStrategy, productionStrategy, dualVendorRationale) must each be under 200 characters.
 
 SCORING CRITERIA (must be applied rigorously):
 - Technical Match (40%): Process capability alignment, machine capabilities, tolerance achievement, material expertise
