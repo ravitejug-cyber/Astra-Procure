@@ -10,20 +10,20 @@ interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
 
 const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
   ({ className, label, children, ...props }, ref) => (
-    <div className="relative">
-      {label && <label className="block text-xs font-medium text-slate-400 mb-1">{label}</label>}
+    <div>
+      {label && <label className="block text-sm font-medium text-slate-700 mb-1.5">{label}</label>}
       <div className="relative">
         <select
           ref={ref}
           className={cn(
-            "w-full appearance-none rounded-md border border-slate-700 bg-slate-900/80 px-3 py-2 text-sm text-slate-200 shadow-sm transition-colors focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:cursor-not-allowed disabled:opacity-50",
+            "w-full appearance-none rounded-xl border border-slate-200 bg-slate-50/80 px-4 py-2.5 text-sm text-slate-800 shadow-sm transition-all focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 disabled:cursor-not-allowed disabled:opacity-50",
             className
           )}
           {...props}
         >
           {children}
         </select>
-        <ChevronDown className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+        <ChevronDown className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
       </div>
     </div>
   )

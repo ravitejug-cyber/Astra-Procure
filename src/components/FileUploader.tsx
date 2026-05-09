@@ -23,9 +23,9 @@ const ACCEPTED_TYPES: Record<string, string[]> = {
 };
 
 function fileIcon(type: string) {
-  if (type.startsWith("image/")) return <Image className="h-4 w-4 text-blue-400" />;
-  if (type === "application/pdf") return <FileText className="h-4 w-4 text-red-400" />;
-  return <File className="h-4 w-4 text-slate-400" />;
+  if (type.startsWith("image/")) return <Image className="h-4 w-4 text-blue-500" />;
+  if (type === "application/pdf") return <FileText className="h-4 w-4 text-red-500" />;
+  return <File className="h-4 w-4 text-slate-500" />;
 }
 
 export function FileUploader({ files, onChange }: FileUploaderProps) {
@@ -79,33 +79,33 @@ export function FileUploader({ files, onChange }: FileUploaderProps) {
       <div
         {...getRootProps()}
         className={cn(
-          "relative rounded-xl border-2 border-dashed p-8 text-center cursor-pointer transition-all duration-200",
+          "relative rounded-2xl border-2 border-dashed p-8 text-center cursor-pointer transition-all duration-200",
           isDragActive
-            ? "border-blue-500 bg-blue-500/10"
-            : "border-slate-600 hover:border-slate-500 hover:bg-slate-800/40"
+            ? "border-blue-400 bg-blue-50"
+            : "border-slate-200 hover:border-blue-300 hover:bg-blue-50/40"
         )}
       >
         <input {...getInputProps()} />
         <div className="flex flex-col items-center gap-3">
           <div className={cn(
-            "rounded-full p-3 transition-colors",
-            isDragActive ? "bg-blue-500/20" : "bg-slate-700/60"
+            "rounded-2xl p-3 transition-colors",
+            isDragActive ? "bg-blue-100" : "bg-slate-100"
           )}>
-            <Upload className={cn("h-7 w-7", isDragActive ? "text-blue-400" : "text-slate-400")} />
+            <Upload className={cn("h-6 w-6", isDragActive ? "text-blue-500" : "text-slate-400")} />
           </div>
           <div>
-            <p className="text-sm font-medium text-slate-300">
+            <p className="text-sm font-medium text-slate-700">
               {isDragActive ? "Drop files here…" : "Drag & drop files, or click to browse"}
             </p>
-            <p className="mt-1 text-xs text-slate-500">
-              PDF, DXF, STEP, JPG, PNG, WebP — up to 20 MB each, max 10 files
+            <p className="mt-1 text-xs text-slate-400">
+              PDF, DXF, STEP, JPG, PNG — up to 20 MB each, max 10 files
             </p>
           </div>
         </div>
       </div>
 
       {error && (
-        <p className="text-xs text-red-400 flex items-center gap-1">
+        <p className="text-xs text-red-600 flex items-center gap-1">
           <X className="h-3 w-3" /> {error}
         </p>
       )}
@@ -115,16 +115,16 @@ export function FileUploader({ files, onChange }: FileUploaderProps) {
           {files.map((f, i) => (
             <li
               key={i}
-              className="flex items-center gap-3 rounded-lg border border-slate-700 bg-slate-800/60 px-3 py-2"
+              className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2"
             >
               {fileIcon(f.type)}
               <div className="flex-1 min-w-0">
-                <p className="truncate text-sm text-slate-200">{f.name}</p>
-                <p className="text-xs text-slate-500">{formatFileSize(f.size)}</p>
+                <p className="truncate text-sm text-slate-700 font-medium">{f.name}</p>
+                <p className="text-xs text-slate-400">{formatFileSize(f.size)}</p>
               </div>
               <button
                 onClick={() => remove(i)}
-                className="text-slate-500 hover:text-red-400 transition-colors"
+                className="text-slate-300 hover:text-red-400 transition-colors"
                 type="button"
               >
                 <X className="h-4 w-4" />
