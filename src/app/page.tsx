@@ -1,10 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-import { BarChart3, History, Loader2, Send, Zap } from "lucide-react";
+import { BarChart3, History, Loader2, Send, Zap, Factory } from "lucide-react";
 import { FileUploader } from "@/components/FileUploader";
 import { CostingResult } from "@/components/CostingResult";
 import { ProjectHistory } from "@/components/ProjectHistory";
+import { VendorDashboard } from "@/components/VendorDashboard";
 import { Button } from "@/components/ui/button";
 import { Select } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
@@ -18,8 +19,9 @@ import type {
   CostingResult as CostingResultType,
   ProjectEntry,
 } from "@/lib/types";
+import type { DiscoveryRequest } from "@/lib/vendorTypes";
 
-type Tab = "analyze" | "history";
+type Tab = "analyze" | "history" | "vendors";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<Tab>("analyze");
@@ -31,8 +33,31 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<CostingResultType | null>(null);
+  const [discoverTrigger, setDiscoverTrigger] = useState(0);
 
   const addProject = useProjectStore((s) => s.addProject);
+
+  const handleFindVendors = (entry?: ProjectEntry) => {
+    if (entry) {
+      setResult(entry.result);
+      setRegion(entry.region);
+      setBatchQty(entry.batchQuantity);
+      setMethod(entry.preferredMethod);
+    }
+    setDiscoverTrigger((t) => t + 1);
+    setActiveTab("vendors");
+  };
+
+  const buildDiscoveryRequest = (): DiscoveryRequest => ({
+    manufacturingMethod: method === "Auto" ? "CNC Machining" : method,
+    material: "Aluminium",
+    toleranceLevel: "±0.05mm",
+    batchQuantity: batchQty,
+    surfaceFinish: "As per drawing",
+    complexity: result?.partSummary?.complexityLevel ?? "Medium",
+    partDescription: files[0]?.name ?? "Aluminium housing component",
+    region,
+  });
 
   const handleSubmit = async () => {
     if (files.length === 0) {
@@ -62,6 +87,7 @@ export default function Home() {
         result: costResult,
         notes: notes || undefined,
       });
+      setActiveTab("vendors");
     } catch (err) {
       setError(err instanceof Error ? err.message : "An unexpected error occurred.");
     } finally {
@@ -76,6 +102,12 @@ export default function Home() {
     setMethod(entry.preferredMethod);
     setActiveTab("analyze");
   };
+
+  const tabConfig: { key: Tab; label: string; icon: React.ReactNode }[] = [
+    { key: "analyze", label: "analyze", icon: <BarChart3 className="h-3.5 w-3.5" /> },
+    { key: "history", label: "history", icon: <History className="h-3.5 w-3.5" /> },
+    { key: "vendors", label: "vendors", icon: <Factory className="h-3.5 w-3.5" /> },
+  ];
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -96,17 +128,17 @@ export default function Home() {
           </div>
 
           <nav className="flex gap-1">
-            {(["analyze", "history"] as Tab[]).map((tab) => (
+            {tabConfig.map(({ key, label, icon }) => (
               <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
+                key={key}
+                onClick={() => setActiveTab(key)}
                 className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all capitalize
-                  ${activeTab === tab
+                  ${activeTab === key
                     ? "bg-blue-50 text-blue-700 shadow-sm"
                     : "text-slate-500 hover:text-slate-800 hover:bg-slate-100"}`}
               >
-                {tab === "analyze" ? <BarChart3 className="h-3.5 w-3.5" /> : <History className="h-3.5 w-3.5" />}
-                {tab}
+                {icon}
+                {label}
               </button>
             ))}
           </nav>
@@ -208,7 +240,18 @@ export default function Home() {
                 </div>
               )}
 
-              {!loading && result && <CostingResult result={result} />}
+              {!loading && result && (
+                <div className="space-y-3">
+                  <CostingResult result={result} />
+                  <button
+                    onClick={() => handleFindVendors()}
+                    className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold py-3.5 text-sm transition-all shadow-md shadow-blue-200 hover:shadow-blue-300"
+                  >
+                    <Factory className="h-4 w-4" />
+                    Find Vendors for This Part
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -216,8 +259,16 @@ export default function Home() {
         {activeTab === "history" && (
           <div className="max-w-2xl mx-auto">
             <h2 className="text-lg font-bold text-slate-800 mb-4">Project History</h2>
-            <ProjectHistory onSelect={handleSelectHistory} />
+            <ProjectHistory onSelect={handleSelectHistory} onFindVendors={handleFindVendors} />
           </div>
+        )}
+
+        {activeTab === "vendors" && (
+          <VendorDashboard
+            costingResult={result}
+            discoveryRequest={buildDiscoveryRequest()}
+            discoverTrigger={discoverTrigger}
+          />
         )}
       </main>
     </div>

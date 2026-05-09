@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Search,
   Users,
@@ -24,9 +24,10 @@ type SubTab = "discovery" | "vendors" | "rfq-tracker";
 interface Props {
   costingResult: CostingResult | null;
   discoveryRequest: DiscoveryRequest | null;
+  discoverTrigger?: number;
 }
 
-export function VendorDashboard({ costingResult, discoveryRequest }: Props) {
+export function VendorDashboard({ costingResult, discoveryRequest, discoverTrigger }: Props) {
   const [activeSubTab, setActiveSubTab] = useState<SubTab>("discovery");
   const [loading, setLoading] = useState(false);
   const [discoveryResult, setDiscoveryResult] = useState<VendorDiscoveryResult | null>(null);
@@ -35,6 +36,7 @@ export function VendorDashboard({ costingResult, discoveryRequest }: Props) {
   const [rfqVendor, setRfqVendor] = useState<Vendor | null>(null);
 
   const { vendors } = useVendorStore();
+  const prevTrigger = useRef(0);
 
   const handleDiscover = async () => {
     if (!discoveryRequest) return;
@@ -60,6 +62,16 @@ export function VendorDashboard({ costingResult, discoveryRequest }: Props) {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (discoverTrigger && discoverTrigger !== prevTrigger.current && costingResult && discoveryRequest) {
+      prevTrigger.current = discoverTrigger;
+      setActiveSubTab("discovery");
+      setDiscoveryResult(null);
+      handleDiscover();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [discoverTrigger, costingResult]);
 
   const topMatches = discoveryResult?.matches.filter((m) => m.recommendation === "top") ?? [];
   const backupMatches = discoveryResult?.matches.filter((m) => m.recommendation === "backup") ?? [];

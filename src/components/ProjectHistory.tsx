@@ -1,15 +1,18 @@
 "use client";
 
 import React, { useState } from "react";
-import { Clock, Trash2, ChevronDown, ChevronRight, FolderOpen } from "lucide-react";
+import { Clock, Trash2, ChevronDown, ChevronRight, FolderOpen, Factory } from "lucide-react";
 import { useProjectStore } from "@/lib/store";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { ProjectEntry } from "@/lib/types";
 
-interface Props { onSelect: (entry: ProjectEntry) => void; }
+interface Props {
+  onSelect: (entry: ProjectEntry) => void;
+  onFindVendors?: (entry: ProjectEntry) => void;
+}
 
-export function ProjectHistory({ onSelect }: Props) {
+export function ProjectHistory({ onSelect, onFindVendors }: Props) {
   const { projects, removeProject, clearAll } = useProjectStore();
   const [expanded, setExpanded] = useState<string | null>(null);
 
@@ -65,6 +68,12 @@ export function ProjectHistory({ onSelect }: Props) {
                   {p.files.length > 0 && <p className="text-xs text-slate-400 truncate">Files: {p.files.map((f) => f.name).join(", ")}</p>}
                   <div className="flex gap-2">
                     <Button size="sm" variant="default" className="flex-1 text-xs" onClick={() => onSelect(p)}>View Analysis</Button>
+                    {onFindVendors && (
+                      <Button size="sm" variant="outline" className="flex-1 text-xs text-blue-600 border-blue-200 hover:bg-blue-50" onClick={() => onFindVendors(p)}>
+                        <Factory className="h-3.5 w-3.5" />
+                        Find Vendors
+                      </Button>
+                    )}
                     <Button size="sm" variant="destructive" onClick={() => removeProject(p.id)}><Trash2 className="h-3.5 w-3.5" /></Button>
                   </div>
                 </div>
