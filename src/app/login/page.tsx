@@ -26,7 +26,12 @@ function LoginForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
       });
-      const data = await res.json();
+      let data: { error?: string; ok?: boolean } = {};
+      try {
+        data = await res.json();
+      } catch {
+        throw new Error("Server error — please try again.");
+      }
       if (!res.ok) throw new Error(data.error ?? "Login failed.");
       router.push(from);
       router.refresh();
@@ -39,6 +44,7 @@ function LoginForm() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center p-4">
+      {/* Background decoration */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-100 rounded-full opacity-60 blur-3xl" />
         <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-indigo-100 rounded-full opacity-50 blur-3xl" />
@@ -46,7 +52,10 @@ function LoginForm() {
       </div>
 
       <div className="relative w-full max-w-md">
+        {/* Card */}
         <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl shadow-blue-100/50 border border-white/60 p-8 sm:p-10">
+
+          {/* Logo */}
           <div className="flex flex-col items-center mb-8">
             <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 shadow-lg shadow-blue-200 mb-4">
               <Zap className="h-7 w-7 text-white" />
@@ -59,15 +68,20 @@ function LoginForm() {
             </p>
           </div>
 
+          {/* Divider */}
           <div className="flex items-center gap-3 mb-6">
             <div className="flex-1 h-px bg-slate-200" />
             <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">Sign in to continue</span>
             <div className="flex-1 h-px bg-slate-200" />
           </div>
 
+          {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Username */}
             <div className="space-y-1.5">
-              <label className="block text-sm font-medium text-slate-700">Username</label>
+              <label className="block text-sm font-medium text-slate-700">
+                Username
+              </label>
               <div className="relative">
                 <User className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                 <input
@@ -82,8 +96,11 @@ function LoginForm() {
               </div>
             </div>
 
+            {/* Password */}
             <div className="space-y-1.5">
-              <label className="block text-sm font-medium text-slate-700">Password</label>
+              <label className="block text-sm font-medium text-slate-700">
+                Password
+              </label>
               <div className="relative">
                 <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                 <input
@@ -104,6 +121,7 @@ function LoginForm() {
               </div>
             </div>
 
+            {/* Error */}
             {error && (
               <div className="flex items-center gap-2 rounded-xl bg-red-50 border border-red-100 px-4 py-3">
                 <div className="h-1.5 w-1.5 rounded-full bg-red-500 shrink-0" />
@@ -111,26 +129,32 @@ function LoginForm() {
               </div>
             )}
 
+            {/* Submit */}
             <button
               type="submit"
               disabled={loading || !username || !password}
               className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-semibold shadow-lg shadow-blue-200 hover:shadow-blue-300 hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none mt-2"
             >
               {loading ? (
-                <><Loader2 className="h-4 w-4 animate-spin" />Signing in…</>
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Signing in…
+                </>
               ) : (
                 "Sign In"
               )}
             </button>
           </form>
 
+          {/* Footer note */}
           <p className="mt-6 text-center text-xs text-slate-400">
             Secure access · Session expires in 8 hours
           </p>
         </div>
 
+        {/* Bottom branding */}
         <p className="mt-6 text-center text-xs text-slate-400">
-          © {new Date().getFullYear()} AstraProcure · Manufacturing Intelligence Platform
+          &copy; {new Date().getFullYear()} AstraProcure · Manufacturing Intelligence Platform
         </p>
       </div>
     </div>
