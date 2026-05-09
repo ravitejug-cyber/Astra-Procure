@@ -37,6 +37,10 @@ export interface PartSummary {
   complexityLevel: string;
   suggestedBatchSize: string;
   estimatedAnnualVolume: string;
+  machiningTimeHours?: string;
+  helicoilCost?: string;
+  manpowerCostPerUnit?: string;
+  rawMaterialMarketPrice?: string;
 }
 
 export interface CostingResult {

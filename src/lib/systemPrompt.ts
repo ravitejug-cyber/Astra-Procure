@@ -26,10 +26,14 @@ YOU MUST RESPOND IN THE FOLLOWING EXACT JSON FORMAT (no markdown fences, just ra
     "partName": "string",
     "manufacturingMethod": "string",
     "material": "string",
-    "estimatedWeight": "string",
+    "estimatedWeight": "string (e.g. 1.2 kg)",
     "complexityLevel": "Low|Medium|High|Very High",
     "suggestedBatchSize": "string",
-    "estimatedAnnualVolume": "string"
+    "estimatedAnnualVolume": "string",
+    "machiningTimeHours": "string (e.g. 2.5 hrs/unit for CNC; cycle time for die casting)",
+    "helicoilCost": "string or null — include ONLY if threaded inserts or helicoils are required (e.g. M6 helicoil inserts: INR 18/unit × 4 = INR 72)",
+    "manpowerCostPerUnit": "string (estimated direct labour cost per unit including setup, operation, deburring)",
+    "rawMaterialMarketPrice": "string (current market rate per kg for the specific alloy, e.g. Al 6061: INR 250/kg)"
   },
   "costBreakdown": [
     { "item": "Raw Material", "estimatedCost": "string", "notes": "string" },

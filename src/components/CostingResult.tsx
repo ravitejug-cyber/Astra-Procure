@@ -1,33 +1,36 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import {
-  AlertTriangle, CheckCircle2, ChevronRight, Download, Info,
-  Lightbulb, Settings2, ShieldAlert, TrendingDown, Wrench,
+  AlertTriangle, CheckCircle2, ChevronRight, Clock, Download,
+  Info, Lightbulb, Scale, Settings2, ShieldAlert, TrendingDown,
+  Wrench, Users, PackageSearch,
 } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { CostingResult as CostingResultType } from "@/lib/types";
 
 interface Props { result: CostingResultType; }
 
-const complexityColor = (level: string) => {
+type Tab = "cost" | "process" | "risk" | "ideas";
+
+const complexityColor = (level: string): "success" | "warning" | "destructive" | "secondary" => {
   const map: Record<string, "success" | "warning" | "destructive" | "secondary"> = {
     Low: "success", Medium: "warning", High: "destructive", "Very High": "destructive",
   };
   return map[level] ?? "secondary";
 };
 
-const confidenceColor = (level: string) => {
+const confidenceColor = (level: string): "success" | "warning" | "destructive" => {
   const map: Record<string, "success" | "warning" | "destructive"> = {
     High: "success", Medium: "warning", Low: "destructive",
   };
-  return map[level] ?? "secondary" as "success";
+  return map[level] ?? "warning";
 };
 
 export function CostingResult({ result }: Props) {
   const printRef = useRef<HTMLDivElement>(null);
+  const [activeTab, setActiveTab] = useState<Tab>("cost");
 
   const handleExportPDF = async () => {
     const { default: jsPDF } = await import("jspdf");
@@ -43,191 +46,223 @@ export function CostingResult({ result }: Props) {
   const totalRow = costBreakdown.find((r) => r.item === "Total Estimated Cost");
   const lineItems = costBreakdown.filter((r) => r.item !== "Total Estimated Cost");
 
+  const tabs: { key: Tab; label: string; icon: React.ReactNode }[] = [
+    { key: "cost", label: "Cost", icon: <TrendingDown className="h-3.5 w-3.5" /> },
+    { key: "process", label: "Process", icon: <Wrench className="h-3.5 w-3.5" /> },
+    { key: "risk", label: "Risk", icon: <ShieldAlert className="h-3.5 w-3.5" /> },
+    { key: "ideas", label: "DFM Ideas", icon: <Lightbulb className="h-3.5 w-3.5" /> },
+  ];
+
   return (
-    <div className="space-y-4">
-      <div className="flex justify-end">
-        <Button variant="outline" size="sm" onClick={handleExportPDF}>
-          <Download className="h-4 w-4" /> Export PDF
-        </Button>
+    <div className="space-y-3" ref={printRef}>
+      {/* Hero Summary Card */}
+      <div className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+        {/* Top bar */}
+        <div className="flex items-start justify-between gap-3 px-5 pt-4 pb-3 border-b border-slate-100">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-blue-50">
+              <Settings2 className="h-4 w-4 text-blue-600" />
+            </div>
+            <div className="min-w-0">
+              <p className="font-semibold text-slate-900 text-sm leading-tight truncate">{ps.partName}</p>
+              <p className="text-xs text-slate-500 truncate">{ps.manufacturingMethod} · {ps.material}</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            <Badge variant={complexityColor(ps.complexityLevel)} className="text-xs">{ps.complexityLevel}</Badge>
+            <Badge variant={confidenceColor(confidenceLevel)} className="gap-1 text-xs">
+              {confidenceLevel === "High" ? <CheckCircle2 className="h-3 w-3" /> : <AlertTriangle className="h-3 w-3" />}
+              {confidenceLevel}
+            </Badge>
+            <Button variant="outline" size="sm" onClick={handleExportPDF} className="text-xs h-7 px-2.5">
+              <Download className="h-3.5 w-3.5" />
+            </Button>
+          </div>
+        </div>
+
+        {/* Key metrics grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 divide-x divide-y divide-slate-100">
+          <div className="px-4 py-3 flex items-center gap-2">
+            <Scale className="h-4 w-4 text-slate-400 shrink-0" />
+            <div className="min-w-0">
+              <p className="text-xs text-slate-400">Weight</p>
+              <p className="text-sm font-semibold text-slate-800 truncate">{ps.estimatedWeight}</p>
+            </div>
+          </div>
+          <div className="px-4 py-3 flex items-center gap-2">
+            <Clock className="h-4 w-4 text-slate-400 shrink-0" />
+            <div className="min-w-0">
+              <p className="text-xs text-slate-400">Machining Time</p>
+              <p className="text-sm font-semibold text-slate-800 truncate">{ps.machiningTimeHours ?? "—"}</p>
+            </div>
+          </div>
+          <div className="px-4 py-3 flex items-center gap-2">
+            <Users className="h-4 w-4 text-slate-400 shrink-0" />
+            <div className="min-w-0">
+              <p className="text-xs text-slate-400">Manpower Cost</p>
+              <p className="text-sm font-semibold text-slate-800 truncate">{ps.manpowerCostPerUnit ?? "—"}</p>
+            </div>
+          </div>
+          <div className="px-4 py-3 flex items-center gap-2">
+            <PackageSearch className="h-4 w-4 text-slate-400 shrink-0" />
+            <div className="min-w-0">
+              <p className="text-xs text-slate-400">Raw Material Rate</p>
+              <p className="text-sm font-semibold text-slate-800 truncate">{ps.rawMaterialMarketPrice ?? "—"}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Total cost banner */}
+        {totalRow && (
+          <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-5 py-3 flex items-center justify-between">
+            <span className="text-sm font-semibold text-blue-100">Total Estimated Cost</span>
+            <span className="text-xl font-bold text-white font-mono">{totalRow.estimatedCost}</span>
+          </div>
+        )}
+
+        {/* Confidence note */}
+        {confidenceExplanation && (
+          <div className="px-5 py-2.5 flex items-start gap-2 bg-slate-50 border-t border-slate-100">
+            <Info className="h-3.5 w-3.5 text-slate-400 mt-0.5 shrink-0" />
+            <p className="text-xs text-slate-500 leading-relaxed">{confidenceExplanation}</p>
+          </div>
+        )}
       </div>
-      <div ref={printRef} className="space-y-4">
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between gap-2 flex-wrap">
-              <CardTitle className="flex items-center gap-2 text-slate-800">
-                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-blue-50">
-                  <Settings2 className="h-4 w-4 text-blue-600" />
-                </div>
-                Part Summary
-              </CardTitle>
-              <div className="flex gap-2 flex-wrap">
-                <Badge variant={complexityColor(ps.complexityLevel)}>{ps.complexityLevel} Complexity</Badge>
-                <Badge variant={confidenceColor(confidenceLevel)} className="gap-1">
-                  {confidenceLevel === "High" ? <CheckCircle2 className="h-3 w-3" /> : <AlertTriangle className="h-3 w-3" />}
-                  {confidenceLevel} Confidence
-                </Badge>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <dl className="grid grid-cols-2 gap-x-6 gap-y-4 sm:grid-cols-3">
-              {[
-                ["Part Name", ps.partName], ["Manufacturing Method", ps.manufacturingMethod],
-                ["Material", ps.material], ["Estimated Weight", ps.estimatedWeight],
-                ["Suggested Batch Size", ps.suggestedBatchSize], ["Est. Annual Volume", ps.estimatedAnnualVolume],
-              ].map(([label, value]) => (
-                <div key={label} className="rounded-xl bg-slate-50 p-3">
-                  <dt className="text-xs text-slate-500 font-medium uppercase tracking-wide">{label}</dt>
-                  <dd className="mt-1 text-sm font-semibold text-slate-800">{value}</dd>
-                </div>
-              ))}
-            </dl>
-            {confidenceExplanation && (
-              <p className="mt-4 text-xs text-slate-500 border-t border-slate-100 pt-3 flex gap-2">
-                <Info className="h-4 w-4 shrink-0 text-slate-400 mt-0.5" />{confidenceExplanation}
-              </p>
-            )}
-          </CardContent>
-        </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-slate-800">
-              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-50">
-                <TrendingDown className="h-4 w-4 text-emerald-600" />
-              </div>
-              Cost Breakdown
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="overflow-x-auto rounded-xl border border-slate-100">
-              <table className="w-full text-sm">
-                <thead className="bg-slate-50">
-                  <tr>
-                    <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Item</th>
-                    <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">Est. Cost</th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500 hidden sm:table-cell">Notes</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100">
-                  {lineItems.map((row) => (
-                    <tr key={row.item} className="hover:bg-slate-50/60 transition-colors">
-                      <td className="px-4 py-3 text-slate-700">{row.item}</td>
-                      <td className="px-4 py-3 text-right font-mono font-medium text-slate-800 whitespace-nowrap">{row.estimatedCost}</td>
-                      <td className="px-4 py-3 text-xs text-slate-400 hidden sm:table-cell">{row.notes}</td>
+      {/* Tabs */}
+      <div className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+        <div className="flex gap-0 border-b border-slate-100 bg-slate-50/70">
+          {tabs.map(({ key, label, icon }) => (
+            <button
+              key={key}
+              onClick={() => setActiveTab(key)}
+              className={`flex-1 inline-flex items-center justify-center gap-1.5 py-2.5 text-xs font-semibold transition-all border-b-2 ${
+                activeTab === key
+                  ? "border-blue-600 text-blue-700 bg-white"
+                  : "border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-100"
+              }`}
+            >
+              {icon}
+              <span className="hidden sm:inline">{label}</span>
+            </button>
+          ))}
+        </div>
+
+        <div className="p-4">
+          {/* Cost Tab */}
+          {activeTab === "cost" && (
+            <div className="space-y-3">
+              {ps.helicoilCost && (
+                <div className="rounded-xl border border-amber-100 bg-amber-50 px-4 py-2.5 flex items-center gap-2">
+                  <AlertTriangle className="h-4 w-4 text-amber-500 shrink-0" />
+                  <div>
+                    <p className="text-xs font-semibold text-amber-700">Helicoil / Threaded Inserts</p>
+                    <p className="text-xs text-amber-700">{ps.helicoilCost}</p>
+                  </div>
+                </div>
+              )}
+              <div className="overflow-x-auto rounded-xl border border-slate-100">
+                <table className="w-full text-sm">
+                  <thead className="bg-slate-50">
+                    <tr>
+                      <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Item</th>
+                      <th className="px-4 py-2.5 text-right text-xs font-semibold uppercase tracking-wide text-slate-500 whitespace-nowrap">Est. Cost</th>
+                      <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wide text-slate-500 hidden sm:table-cell">Notes</th>
                     </tr>
-                  ))}
-                  {totalRow && (
-                    <tr className="bg-gradient-to-r from-blue-50 to-indigo-50">
-                      <td className="px-4 py-3.5 font-bold text-blue-700">{totalRow.item}</td>
-                      <td className="px-4 py-3.5 text-right font-mono font-bold text-blue-700 text-base whitespace-nowrap">{totalRow.estimatedCost}</td>
-                      <td className="px-4 py-3.5 text-xs text-slate-400 hidden sm:table-cell">{totalRow.notes}</td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-slate-800">
-              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-amber-50">
-                <Wrench className="h-4 w-4 text-amber-600" />
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {lineItems.map((row) => (
+                      <tr key={row.item} className="hover:bg-slate-50/60 transition-colors">
+                        <td className="px-4 py-2.5 text-slate-700">{row.item}</td>
+                        <td className="px-4 py-2.5 text-right font-mono font-medium text-slate-800 whitespace-nowrap">{row.estimatedCost}</td>
+                        <td className="px-4 py-2.5 text-xs text-slate-400 hidden sm:table-cell">{row.notes}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
-              Process Analysis
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {[
-                ["Recommended Process", pa.recommendedProcess], ["Alternative Process", pa.alternativeProcess],
-                ["Estimated Cycle Time", pa.estimatedCycleTime], ["Tolerance Capability", pa.suggestedToleranceCapability],
-                ["Fixture Complexity", pa.fixtureComplexity], ["Recommended Machine", pa.recommendedMachineType],
-              ].map(([label, value]) => (
-                <div key={label} className="rounded-xl bg-slate-50 border border-slate-100 p-3.5">
-                  <p className="text-xs text-slate-500 font-medium uppercase tracking-wide">{label}</p>
-                  <p className="mt-1 text-sm font-medium text-slate-800">{value}</p>
+              <div className="grid grid-cols-2 gap-3 text-xs text-slate-500">
+                <div className="rounded-xl bg-slate-50 border border-slate-100 px-3 py-2">
+                  <p className="font-medium text-slate-400 uppercase tracking-wide mb-0.5">Batch Size</p>
+                  <p className="font-semibold text-slate-700">{ps.suggestedBatchSize}</p>
                 </div>
-              ))}
+                <div className="rounded-xl bg-slate-50 border border-slate-100 px-3 py-2">
+                  <p className="font-medium text-slate-400 uppercase tracking-wide mb-0.5">Annual Volume</p>
+                  <p className="font-semibold text-slate-700">{ps.estimatedAnnualVolume}</p>
+                </div>
+              </div>
             </div>
-            {pa.keyMachiningChallenges?.length > 0 && (
-              <div className="rounded-xl border border-amber-100 bg-amber-50/60 p-4">
-                <p className="text-xs font-semibold uppercase text-amber-700 mb-2.5 tracking-wide">Key Machining Challenges</p>
-                <ul className="space-y-1.5">
-                  {pa.keyMachiningChallenges.map((c, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-slate-700">
-                      <ChevronRight className="h-4 w-4 text-amber-500 mt-0.5 shrink-0" />{c}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+          )}
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-slate-800">
-              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-red-50">
-                <ShieldAlert className="h-4 w-4 text-red-500" />
+          {/* Process Tab */}
+          {activeTab === "process" && (
+            <div className="space-y-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                {[
+                  ["Recommended Process", pa.recommendedProcess],
+                  ["Alternative Process", pa.alternativeProcess],
+                  ["Estimated Cycle Time", pa.estimatedCycleTime],
+                  ["Tolerance Capability", pa.suggestedToleranceCapability],
+                  ["Fixture Complexity", pa.fixtureComplexity],
+                  ["Recommended Machine", pa.recommendedMachineType],
+                ].map(([label, value]) => (
+                  <div key={label} className="rounded-xl bg-slate-50 border border-slate-100 px-3.5 py-2.5">
+                    <p className="text-xs text-slate-400 font-medium uppercase tracking-wide">{label}</p>
+                    <p className="mt-0.5 text-sm font-medium text-slate-800">{value}</p>
+                  </div>
+                ))}
               </div>
-              Design Risk Analysis
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {pa.keyMachiningChallenges?.length > 0 && (
+                <div className="rounded-xl border border-amber-100 bg-amber-50/60 p-3.5">
+                  <p className="text-xs font-semibold uppercase text-amber-700 mb-2 tracking-wide">Key Machining Challenges</p>
+                  <ul className="space-y-1.5">
+                    {pa.keyMachiningChallenges.map((c, i) => (
+                      <li key={i} className="flex items-start gap-2 text-sm text-slate-700">
+                        <ChevronRight className="h-4 w-4 text-amber-500 mt-0.5 shrink-0" />{c}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Risk Tab */}
+          {activeTab === "risk" && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               {[
-                ["Thin Wall Risks", dr.thinWallRisks], ["Tool Accessibility", dr.toolAccessibility],
-                ["Warpage Risks", dr.warpageRisks], ["Tight Tolerance Risks", dr.tightToleranceRisks],
-                ["Surface Finish Risks", dr.surfaceFinishRisks], ["Threading Risks", dr.threadingRisks],
-                ["Deep Pocket Risks", dr.deepPocketRisks], ["Die Casting Porosity", dr.dieCastingPorosityRisks],
+                ["Thin Wall Risks", dr.thinWallRisks],
+                ["Tool Accessibility", dr.toolAccessibility],
+                ["Warpage Risks", dr.warpageRisks],
+                ["Tight Tolerance Risks", dr.tightToleranceRisks],
+                ["Surface Finish Risks", dr.surfaceFinishRisks],
+                ["Threading Risks", dr.threadingRisks],
+                ["Deep Pocket Risks", dr.deepPocketRisks],
+                ["Die Casting Porosity", dr.dieCastingPorosityRisks],
               ].map(([label, value]) => (
-                <div key={label} className="rounded-xl border border-slate-100 bg-slate-50 p-3.5">
-                  <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">{label}</p>
+                <div key={label} className="rounded-xl border border-slate-100 bg-slate-50 px-3.5 py-2.5">
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1">{label}</p>
                   <p className="text-sm text-slate-700">{value}</p>
                 </div>
               ))}
             </div>
-          </CardContent>
-        </Card>
+          )}
 
-        {costReductionIdeas?.length > 0 && (
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-slate-800">
-                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-yellow-50">
-                  <Lightbulb className="h-4 w-4 text-yellow-500" />
-                </div>
-                Cost Reduction Ideas
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ol className="space-y-2.5">
-                {costReductionIdeas.map((idea, i) => (
-                  <li key={i} className="flex gap-3 text-sm items-start rounded-xl bg-gradient-to-r from-yellow-50 to-amber-50 border border-yellow-100 p-3.5">
-                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-yellow-400 text-xs font-bold text-white">{i + 1}</span>
-                    <span className="text-slate-700">{idea}</span>
-                  </li>
-                ))}
-              </ol>
-            </CardContent>
-          </Card>
-        )}
-
-        {result.rawMarkdown && (
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-sm text-slate-500 font-medium">Full Engineering Analysis</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <pre className="whitespace-pre-wrap text-xs text-slate-500 font-mono leading-relaxed max-h-96 overflow-y-auto">
-                {result.rawMarkdown}
-              </pre>
-            </CardContent>
-          </Card>
-        )}
+          {/* Ideas Tab */}
+          {activeTab === "ideas" && (
+            <ol className="space-y-2">
+              {costReductionIdeas?.map((idea, i) => (
+                <li key={i} className="flex gap-3 text-sm items-start rounded-xl bg-gradient-to-r from-yellow-50 to-amber-50 border border-yellow-100 px-3.5 py-2.5">
+                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-yellow-400 text-xs font-bold text-white">{i + 1}</span>
+                  <span className="text-slate-700">{idea}</span>
+                </li>
+              ))}
+              {(!costReductionIdeas || costReductionIdeas.length === 0) && (
+                <p className="text-sm text-slate-400 text-center py-8">No cost reduction ideas available.</p>
+              )}
+            </ol>
+          )}
+        </div>
       </div>
     </div>
   );
