@@ -2,25 +2,15 @@
 
 import React, { useRef } from "react";
 import {
-  AlertTriangle,
-  CheckCircle2,
-  ChevronRight,
-  Download,
-  Info,
-  Lightbulb,
-  Settings2,
-  ShieldAlert,
-  TrendingDown,
-  Wrench,
+  AlertTriangle, CheckCircle2, ChevronRight, Download, Info,
+  Lightbulb, Settings2, ShieldAlert, TrendingDown, Wrench,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { CostingResult as CostingResultType } from "@/lib/types";
 
-interface Props {
-  result: CostingResultType;
-}
+interface Props { result: CostingResultType; }
 
 const complexityColor = (level: string) => {
   const map: Record<string, "success" | "warning" | "destructive" | "secondary"> = {
@@ -57,13 +47,10 @@ export function CostingResult({ result }: Props) {
     <div className="space-y-4">
       <div className="flex justify-end">
         <Button variant="outline" size="sm" onClick={handleExportPDF}>
-          <Download className="h-4 w-4" />
-          Export PDF
+          <Download className="h-4 w-4" /> Export PDF
         </Button>
       </div>
-
       <div ref={printRef} className="space-y-4">
-        {/* Part Summary */}
         <Card>
           <CardHeader>
             <div className="flex items-center justify-between gap-2 flex-wrap">
@@ -85,12 +72,9 @@ export function CostingResult({ result }: Props) {
           <CardContent>
             <dl className="grid grid-cols-2 gap-x-6 gap-y-4 sm:grid-cols-3">
               {[
-                ["Part Name", ps.partName],
-                ["Manufacturing Method", ps.manufacturingMethod],
-                ["Material", ps.material],
-                ["Estimated Weight", ps.estimatedWeight],
-                ["Suggested Batch Size", ps.suggestedBatchSize],
-                ["Est. Annual Volume", ps.estimatedAnnualVolume],
+                ["Part Name", ps.partName], ["Manufacturing Method", ps.manufacturingMethod],
+                ["Material", ps.material], ["Estimated Weight", ps.estimatedWeight],
+                ["Suggested Batch Size", ps.suggestedBatchSize], ["Est. Annual Volume", ps.estimatedAnnualVolume],
               ].map(([label, value]) => (
                 <div key={label} className="rounded-xl bg-slate-50 p-3">
                   <dt className="text-xs text-slate-500 font-medium uppercase tracking-wide">{label}</dt>
@@ -100,14 +84,12 @@ export function CostingResult({ result }: Props) {
             </dl>
             {confidenceExplanation && (
               <p className="mt-4 text-xs text-slate-500 border-t border-slate-100 pt-3 flex gap-2">
-                <Info className="h-4 w-4 shrink-0 text-slate-400 mt-0.5" />
-                {confidenceExplanation}
+                <Info className="h-4 w-4 shrink-0 text-slate-400 mt-0.5" />{confidenceExplanation}
               </p>
             )}
           </CardContent>
         </Card>
 
-        {/* Cost Breakdown */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-slate-800">
@@ -148,7 +130,6 @@ export function CostingResult({ result }: Props) {
           </CardContent>
         </Card>
 
-        {/* Process Analysis */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-slate-800">
@@ -161,12 +142,9 @@ export function CostingResult({ result }: Props) {
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {[
-                ["Recommended Process", pa.recommendedProcess],
-                ["Alternative Process", pa.alternativeProcess],
-                ["Estimated Cycle Time", pa.estimatedCycleTime],
-                ["Tolerance Capability", pa.suggestedToleranceCapability],
-                ["Fixture Complexity", pa.fixtureComplexity],
-                ["Recommended Machine", pa.recommendedMachineType],
+                ["Recommended Process", pa.recommendedProcess], ["Alternative Process", pa.alternativeProcess],
+                ["Estimated Cycle Time", pa.estimatedCycleTime], ["Tolerance Capability", pa.suggestedToleranceCapability],
+                ["Fixture Complexity", pa.fixtureComplexity], ["Recommended Machine", pa.recommendedMachineType],
               ].map(([label, value]) => (
                 <div key={label} className="rounded-xl bg-slate-50 border border-slate-100 p-3.5">
                   <p className="text-xs text-slate-500 font-medium uppercase tracking-wide">{label}</p>
@@ -180,8 +158,7 @@ export function CostingResult({ result }: Props) {
                 <ul className="space-y-1.5">
                   {pa.keyMachiningChallenges.map((c, i) => (
                     <li key={i} className="flex items-start gap-2 text-sm text-slate-700">
-                      <ChevronRight className="h-4 w-4 text-amber-500 mt-0.5 shrink-0" />
-                      {c}
+                      <ChevronRight className="h-4 w-4 text-amber-500 mt-0.5 shrink-0" />{c}
                     </li>
                   ))}
                 </ul>
@@ -190,7 +167,6 @@ export function CostingResult({ result }: Props) {
           </CardContent>
         </Card>
 
-        {/* Design Risk Analysis */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-slate-800">
@@ -203,14 +179,10 @@ export function CostingResult({ result }: Props) {
           <CardContent>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {[
-                ["Thin Wall Risks", dr.thinWallRisks],
-                ["Tool Accessibility", dr.toolAccessibility],
-                ["Warpage Risks", dr.warpageRisks],
-                ["Tight Tolerance Risks", dr.tightToleranceRisks],
-                ["Surface Finish Risks", dr.surfaceFinishRisks],
-                ["Threading Risks", dr.threadingRisks],
-                ["Deep Pocket Risks", dr.deepPocketRisks],
-                ["Die Casting Porosity", dr.dieCastingPorosityRisks],
+                ["Thin Wall Risks", dr.thinWallRisks], ["Tool Accessibility", dr.toolAccessibility],
+                ["Warpage Risks", dr.warpageRisks], ["Tight Tolerance Risks", dr.tightToleranceRisks],
+                ["Surface Finish Risks", dr.surfaceFinishRisks], ["Threading Risks", dr.threadingRisks],
+                ["Deep Pocket Risks", dr.deepPocketRisks], ["Die Casting Porosity", dr.dieCastingPorosityRisks],
               ].map(([label, value]) => (
                 <div key={label} className="rounded-xl border border-slate-100 bg-slate-50 p-3.5">
                   <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">{label}</p>
@@ -221,7 +193,6 @@ export function CostingResult({ result }: Props) {
           </CardContent>
         </Card>
 
-        {/* Cost Reduction Ideas */}
         {costReductionIdeas?.length > 0 && (
           <Card>
             <CardHeader>
@@ -236,9 +207,7 @@ export function CostingResult({ result }: Props) {
               <ol className="space-y-2.5">
                 {costReductionIdeas.map((idea, i) => (
                   <li key={i} className="flex gap-3 text-sm items-start rounded-xl bg-gradient-to-r from-yellow-50 to-amber-50 border border-yellow-100 p-3.5">
-                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-yellow-400 text-xs font-bold text-white">
-                      {i + 1}
-                    </span>
+                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-yellow-400 text-xs font-bold text-white">{i + 1}</span>
                     <span className="text-slate-700">{idea}</span>
                   </li>
                 ))}
