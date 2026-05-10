@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useProjectStore } from "@/lib/store";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 import type {
   UploadedFile,
   Region,
@@ -250,7 +251,9 @@ export default function Home() {
 
               {!loading && result && (
                 <div className="space-y-3">
-                  <CostingResult result={result} />
+                  <ErrorBoundary>
+                    <CostingResult result={result} />
+                  </ErrorBoundary>
                   <button
                     onClick={() => handleFindVendors()}
                     className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold py-3.5 text-sm transition-all shadow-md shadow-blue-200 hover:shadow-blue-300"
@@ -272,11 +275,13 @@ export default function Home() {
         )}
 
         {activeTab === "vendors" && (
-          <VendorDashboard
-            costingResult={result}
-            discoveryRequest={buildDiscoveryRequest()}
-            discoverTrigger={discoverTrigger}
-          />
+          <ErrorBoundary>
+            <VendorDashboard
+              costingResult={result}
+              discoveryRequest={buildDiscoveryRequest()}
+              discoverTrigger={discoverTrigger}
+            />
+          </ErrorBoundary>
         )}
       </main>
     </div>
