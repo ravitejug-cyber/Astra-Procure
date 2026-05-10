@@ -200,9 +200,9 @@ export function VendorDashboard({ costingResult, discoveryRequest, discoverTrigg
                           Top Recommended Suppliers
                         </h3>
                         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-                          {topMatches.map((match) => (
+                          {topMatches.map((match, i) => (
                             <VendorCard
-                              key={match.vendor.id}
+                              key={i}
                               match={match}
                               onGenerateRFQ={setRfqVendor}
                             />
@@ -218,9 +218,9 @@ export function VendorDashboard({ costingResult, discoveryRequest, discoverTrigg
                           Backup Suppliers
                         </h3>
                         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-                          {backupMatches.map((match) => (
+                          {backupMatches.map((match, i) => (
                             <VendorCard
-                              key={match.vendor.id}
+                              key={i}
                               match={match}
                               onGenerateRFQ={setRfqVendor}
                             />

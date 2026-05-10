@@ -47,7 +47,12 @@ function parseVendorResult(raw: string): VendorDiscoveryResult {
   const repaired = repairTruncatedJson(raw);
   const parsed = JSON.parse(repaired);
   return {
-    matches: Array.isArray(parsed.matches) ? parsed.matches : [],
+    matches: Array.isArray(parsed.matches)
+      ? parsed.matches.map((m: Record<string, unknown>) => ({
+          ...m,
+          vendor: m.vendor ? { ...(m.vendor as Record<string, unknown>), id: crypto.randomUUID() } : m.vendor,
+        }))
+      : [],
     sourcingRisks: Array.isArray(parsed.sourcingRisks) ? parsed.sourcingRisks : [],
     rfqStrategy: parsed.rfqStrategy ?? "",
     recommendedSuppliersCount: parsed.recommendedSuppliersCount ?? 0,
