@@ -18,13 +18,11 @@ jobs:
       - name: Install Vercel CLI
         run: npm install -g vercel@latest
 
+      - name: Pull Vercel project settings
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Build project
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+
       - name: Deploy to Vercel
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: |
-          vercel --prod --yes --token "$VERCEL_TOKEN" \
-            --env ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY:-}" \
-            --env APP_USERNAME="ravitej" \
-            --env APP_PASSWORD="ravitej1989" \
-            --env APP_SECRET="astra-secure-secret-2024"
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
