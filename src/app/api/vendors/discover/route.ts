@@ -60,12 +60,37 @@ function repairTruncatedJson(raw: string): string {
   }
 }
 
+function cleanStr(s: unknown): string {
+  if (typeof s !== "string") return String(s ?? "");
+  return s.replace(/^[•‣◦⁃∙\-\*]\s*/, "").trim();
+}
+
+function cleanStrArray(arr: unknown): string[] {
+  return Array.isArray(arr) ? arr.map(cleanStr) : [];
+}
+
 function parseVendorResult(raw: string): VendorDiscoveryResult {
   const repaired = repairTruncatedJson(raw);
   const parsed = JSON.parse(repaired);
   return {
-    matches: Array.isArray(parsed.matches) ? parsed.matches : [],
-    sourcingRisks: Array.isArray(parsed.sourcingRisks) ? parsed.sourcingRisks : [],
+    matches: Array.isArray(parsed.matches)
+      ? parsed.matches.map((m: Record<string, unknown>) => ({
+          ...m,
+          vendor: m.vendor
+            ? {
+                ...(m.vendor as Record<string, unknown>),
+                processCapabilities: cleanStrArray((m.vendor as Record<string, unknown>).processCapabilities),
+                certifications: cleanStrArray((m.vendor as Record<string, unknown>).certifications),
+                machines: cleanStrArray((m.vendor as Record<string, unknown>).machines),
+                materialExpertise: cleanStrArray((m.vendor as Record<string, unknown>).materialExpertise),
+                industries: cleanStrArray((m.vendor as Record<string, unknown>).industries),
+              }
+            : m.vendor,
+          matchReasons: cleanStrArray(m.matchReasons),
+          riskFlags: cleanStrArray(m.riskFlags),
+        }))
+      : [],
+    sourcingRisks: cleanStrArray(parsed.sourcingRisks),
     rfqStrategy: parsed.rfqStrategy ?? "",
     recommendedSuppliersCount: parsed.recommendedSuppliersCount ?? 0,
     prototypeStrategy: parsed.prototypeStrategy ?? "",
