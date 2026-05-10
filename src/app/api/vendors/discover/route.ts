@@ -79,6 +79,7 @@ function parseVendorResult(raw: string): VendorDiscoveryResult {
           vendor: m.vendor
             ? {
                 ...(m.vendor as Record<string, unknown>),
+                id: crypto.randomUUID(),
                 processCapabilities: cleanStrArray((m.vendor as Record<string, unknown>).processCapabilities),
                 certifications: cleanStrArray((m.vendor as Record<string, unknown>).certifications),
                 machines: cleanStrArray((m.vendor as Record<string, unknown>).machines),
