@@ -138,28 +138,36 @@ function repairTruncatedJson(raw: string): string {
   }
 }
 
-// Strip leading bullet/dash characters that the AI sometimes adds to string values
+const BULLET_RE = /^[•‣◦⁃∙•‣◦⁃∙\-\*]\s*/;
+
 function cleanStr(s: unknown): string {
   if (typeof s !== "string") return String(s ?? "");
-  return s.replace(/^[•‣◦⁃∙\-\*]\s*/, "").trim();
+  return s.replace(BULLET_RE, "").trim();
+}
+
+// Recursively strip bullet chars from every string in any object/array
+function deepClean<T>(val: T): T {
+  if (typeof val === "string") return cleanStr(val) as unknown as T;
+  if (Array.isArray(val)) return val.map(deepClean) as unknown as T;
+  if (val !== null && typeof val === "object") {
+    const out: Record<string, unknown> = {};
+    for (const [k, v] of Object.entries(val as Record<string, unknown>)) {
+      out[k] = deepClean(v);
+    }
+    return out as unknown as T;
+  }
+  return val;
 }
 
 function parseCostingResult(raw: string): CostingResult {
   const repaired = repairTruncatedJson(raw);
-  const parsed = JSON.parse(repaired);
+  const parsed = deepClean(JSON.parse(repaired));
   return {
     partSummary: parsed.partSummary ?? {},
-    costBreakdown: Array.isArray(parsed.costBreakdown)
-      ? parsed.costBreakdown.map((r: { item?: string; estimatedCost?: string; notes?: string }) => ({
-          ...r,
-          item: cleanStr(r.item),
-        }))
-      : [],
+    costBreakdown: Array.isArray(parsed.costBreakdown) ? parsed.costBreakdown : [],
     processAnalysis: parsed.processAnalysis ?? {},
     designRiskAnalysis: parsed.designRiskAnalysis ?? {},
-    costReductionIdeas: Array.isArray(parsed.costReductionIdeas)
-      ? parsed.costReductionIdeas.map(cleanStr)
-      : [],
+    costReductionIdeas: Array.isArray(parsed.costReductionIdeas) ? parsed.costReductionIdeas : [],
     confidenceLevel: parsed.confidenceLevel ?? "Low",
     confidenceExplanation: parsed.confidenceExplanation ?? "",
     rawMarkdown: parsed.rawMarkdown ?? "",

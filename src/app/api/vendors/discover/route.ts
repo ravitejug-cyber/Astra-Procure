@@ -60,38 +60,38 @@ function repairTruncatedJson(raw: string): string {
   }
 }
 
+const BULLET_RE = /^[•‣◦⁃∙•‣◦⁃∙\-\*]\s*/;
+
 function cleanStr(s: unknown): string {
   if (typeof s !== "string") return String(s ?? "");
-  return s.replace(/^[•‣◦⁃∙\-\*]\s*/, "").trim();
+  return s.replace(BULLET_RE, "").trim();
 }
 
-function cleanStrArray(arr: unknown): string[] {
-  return Array.isArray(arr) ? arr.map(cleanStr) : [];
+function deepClean<T>(val: T): T {
+  if (typeof val === "string") return cleanStr(val) as unknown as T;
+  if (Array.isArray(val)) return val.map(deepClean) as unknown as T;
+  if (val !== null && typeof val === "object") {
+    const out: Record<string, unknown> = {};
+    for (const [k, v] of Object.entries(val as Record<string, unknown>)) {
+      out[k] = deepClean(v);
+    }
+    return out as unknown as T;
+  }
+  return val;
 }
 
 function parseVendorResult(raw: string): VendorDiscoveryResult {
   const repaired = repairTruncatedJson(raw);
-  const parsed = JSON.parse(repaired);
+  const parsed = deepClean(JSON.parse(repaired));
+  const matches = Array.isArray(parsed.matches)
+    ? parsed.matches.map((m: Record<string, unknown>) => ({
+        ...m,
+        vendor: m.vendor ? { ...(m.vendor as Record<string, unknown>), id: crypto.randomUUID() } : m.vendor,
+      }))
+    : [];
   return {
-    matches: Array.isArray(parsed.matches)
-      ? parsed.matches.map((m: Record<string, unknown>) => ({
-          ...m,
-          vendor: m.vendor
-            ? {
-                ...(m.vendor as Record<string, unknown>),
-                id: crypto.randomUUID(),
-                processCapabilities: cleanStrArray((m.vendor as Record<string, unknown>).processCapabilities),
-                certifications: cleanStrArray((m.vendor as Record<string, unknown>).certifications),
-                machines: cleanStrArray((m.vendor as Record<string, unknown>).machines),
-                materialExpertise: cleanStrArray((m.vendor as Record<string, unknown>).materialExpertise),
-                industries: cleanStrArray((m.vendor as Record<string, unknown>).industries),
-              }
-            : m.vendor,
-          matchReasons: cleanStrArray(m.matchReasons),
-          riskFlags: cleanStrArray(m.riskFlags),
-        }))
-      : [],
-    sourcingRisks: cleanStrArray(parsed.sourcingRisks),
+    matches,
+    sourcingRisks: Array.isArray(parsed.sourcingRisks) ? parsed.sourcingRisks : [],
     rfqStrategy: parsed.rfqStrategy ?? "",
     recommendedSuppliersCount: parsed.recommendedSuppliersCount ?? 0,
     prototypeStrategy: parsed.prototypeStrategy ?? "",
