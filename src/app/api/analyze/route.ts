@@ -53,9 +53,26 @@ Respond ONLY with raw JSON matching the specified format. No markdown fences, no
   return { role: "user", content };
 }
 
+// Strip leading Unicode bullet chars from any string the AI might prefix
+const BULLET_RE = /^[•‣◦⁃∙․‥…·]+\s*/;
+function cleanStr(s: unknown): string {
+  if (typeof s !== "string") return String(s ?? "");
+  return s.replace(BULLET_RE, "").trim();
+}
+function deepClean<T>(val: T): T {
+  if (typeof val === "string") return cleanStr(val) as unknown as T;
+  if (Array.isArray(val)) return val.map(deepClean) as unknown as T;
+  if (val !== null && typeof val === "object") {
+    const out: Record<string, unknown> = {};
+    for (const [k, v] of Object.entries(val as Record<string, unknown>)) out[k] = deepClean(v);
+    return out as unknown as T;
+  }
+  return val;
+}
+
 function parseCostingResult(raw: string): CostingResult {
   const cleaned = raw.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/i, "").trim();
-  const parsed = JSON.parse(cleaned);
+  const parsed = deepClean(JSON.parse(cleaned));
   return {
     partSummary: parsed.partSummary ?? {},
     costBreakdown: Array.isArray(parsed.costBreakdown) ? parsed.costBreakdown : [],
