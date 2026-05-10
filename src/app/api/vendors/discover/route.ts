@@ -60,7 +60,7 @@ function repairTruncatedJson(raw: string): string {
   }
 }
 
-const BULLET_RE = /^[•‣◦⁃∙]\s*/;
+const BULLET_RE = /^[•‣◦⁃∙•‣◦⁃∙\-\*]\s*/;
 
 function cleanStr(s: unknown): string {
   if (typeof s !== "string") return String(s ?? "");
