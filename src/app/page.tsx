@@ -49,13 +49,13 @@ export default function Home() {
   };
 
   const buildDiscoveryRequest = (): DiscoveryRequest => ({
-    manufacturingMethod: method === "Auto" ? "CNC Machining" : method,
-    material: "Aluminium",
+    manufacturingMethod: result?.partSummary?.manufacturingMethod ?? (method === "Auto" ? "CNC Machining" : method),
+    material: result?.partSummary?.material ?? "Unknown",
     toleranceLevel: "±0.05mm",
     batchQuantity: batchQty,
     surfaceFinish: "As per drawing",
     complexity: result?.partSummary?.complexityLevel ?? "Medium",
-    partDescription: files[0]?.name ?? "Aluminium housing component",
+    partDescription: result?.partSummary?.partName ?? files[0]?.name ?? "Engineering component",
     region,
   });
 
