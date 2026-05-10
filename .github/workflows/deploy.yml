@@ -1,0 +1,33 @@
+name: Deploy to Vercel
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel@latest
+
+      - name: Deploy to Vercel
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          APP_USERNAME: ravitej
+          APP_PASSWORD: ravitej1989
+          APP_SECRET: ${{ secrets.APP_SECRET }}
+        run: |
+          vercel --prod --yes --token "$VERCEL_TOKEN" \
+            --env ANTHROPIC_API_KEY="$ANTHROPIC_API_KEY" \
+            --env APP_USERNAME="ravitej" \
+            --env APP_PASSWORD="ravitej1989" \
+            --env APP_SECRET="${APP_SECRET:-astra-secure-secret-2024}"
