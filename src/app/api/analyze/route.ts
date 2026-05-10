@@ -138,15 +138,28 @@ function repairTruncatedJson(raw: string): string {
   }
 }
 
+// Strip leading bullet/dash characters that the AI sometimes adds to string values
+function cleanStr(s: unknown): string {
+  if (typeof s !== "string") return String(s ?? "");
+  return s.replace(/^[•‣◦⁃∙\-\*]\s*/, "").trim();
+}
+
 function parseCostingResult(raw: string): CostingResult {
   const repaired = repairTruncatedJson(raw);
   const parsed = JSON.parse(repaired);
   return {
     partSummary: parsed.partSummary ?? {},
-    costBreakdown: Array.isArray(parsed.costBreakdown) ? parsed.costBreakdown : [],
+    costBreakdown: Array.isArray(parsed.costBreakdown)
+      ? parsed.costBreakdown.map((r: { item?: string; estimatedCost?: string; notes?: string }) => ({
+          ...r,
+          item: cleanStr(r.item),
+        }))
+      : [],
     processAnalysis: parsed.processAnalysis ?? {},
     designRiskAnalysis: parsed.designRiskAnalysis ?? {},
-    costReductionIdeas: Array.isArray(parsed.costReductionIdeas) ? parsed.costReductionIdeas : [],
+    costReductionIdeas: Array.isArray(parsed.costReductionIdeas)
+      ? parsed.costReductionIdeas.map(cleanStr)
+      : [],
     confidenceLevel: parsed.confidenceLevel ?? "Low",
     confidenceExplanation: parsed.confidenceExplanation ?? "",
     rawMarkdown: parsed.rawMarkdown ?? "",
