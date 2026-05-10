@@ -16,8 +16,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Username and password are required." }, { status: 400 });
     }
 
-    const validUsername = process.env.APP_USERNAME ?? "admin";
-    const validPassword = process.env.APP_PASSWORD ?? "astra2024";
+    const validUsername = process.env.APP_USERNAME ?? "ravitej";
+    const validPassword = process.env.APP_PASSWORD ?? "ravitej1989";
 
     if (username !== validUsername || password !== validPassword) {
       return NextResponse.json({ error: "Invalid credentials." }, { status: 401 });
