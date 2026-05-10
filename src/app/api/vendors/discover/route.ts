@@ -43,9 +43,25 @@ function repairTruncatedJson(raw: string): string {
   }
 }
 
+const BULLET_RE = /^[•‣◦⁃∙․‥…·]+\s*/;
+function cleanStr(s: unknown): string {
+  if (typeof s !== "string") return String(s ?? "");
+  return s.replace(BULLET_RE, "").trim();
+}
+function deepClean<T>(val: T): T {
+  if (typeof val === "string") return cleanStr(val) as unknown as T;
+  if (Array.isArray(val)) return val.map(deepClean) as unknown as T;
+  if (val !== null && typeof val === "object") {
+    const out: Record<string, unknown> = {};
+    for (const [k, v] of Object.entries(val as Record<string, unknown>)) out[k] = deepClean(v);
+    return out as unknown as T;
+  }
+  return val;
+}
+
 function parseVendorResult(raw: string): VendorDiscoveryResult {
   const repaired = repairTruncatedJson(raw);
-  const parsed = JSON.parse(repaired);
+  const parsed = deepClean(JSON.parse(repaired));
   return {
     matches: Array.isArray(parsed.matches)
       ? parsed.matches.map((m: Record<string, unknown>) => ({
