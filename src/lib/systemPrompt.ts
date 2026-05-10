@@ -76,5 +76,5 @@ YOU MUST RESPOND IN THE FOLLOWING EXACT JSON FORMAT (no markdown fences, just ra
   "costReductionIdeas": ["string", "string", "string", "string", "string"],
   "confidenceLevel": "High|Medium|Low",
   "confidenceExplanation": "string",
-  "rawMarkdown": "string (full human-readable analysis in markdown format)"
+  "rawMarkdown": ""
 }`;
