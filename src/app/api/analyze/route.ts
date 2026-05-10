@@ -4,58 +4,7 @@ import type { Messages } from "@anthropic-ai/sdk/resources";
 import { SYSTEM_PROMPT } from "@/lib/systemPrompt";
 import type { AnalyzeRequest, CostingResult } from "@/lib/types";
 
-const DEMO_MODE = !process.env.ANTHROPIC_API_KEY;
-const client = DEMO_MODE ? null : new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-
-const DEMO_RESULT: CostingResult = {
-  partSummary: {
-    partName: "Aluminium Housing (Demo)",
-    material: "Al 6061-T6",
-    manufacturingMethod: "CNC Machining",
-    complexityLevel: "Medium",
-    estimatedWeight: "1.24 kg",
-    machiningTimeHours: "1.8 hrs",
-    helicoilCost: "₹120/unit",
-    manpowerCostPerUnit: "₹380/unit",
-    rawMaterialMarketPrice: "₹310/kg",
-    suggestedBatchSize: "100 units",
-    estimatedAnnualVolume: "1,200 units/year",
-  },
-  costBreakdown: [
-    { item: "Raw Material (Al 6061-T6)", estimatedCost: "₹310/unit", notes: "@ ₹250/kg, 1.24 kg stock" },
-    { item: "CNC Machining (3-axis)", estimatedCost: "₹420/unit", notes: "1.8 hrs @ ₹230/hr" },
-    { item: "Surface Finish (Anodize Type II)", estimatedCost: "₹85/unit", notes: "Batch anodising" },
-    { item: "Tooling (amortised)", estimatedCost: "₹60/unit", notes: "Over 100 units" },
-    { item: "Overhead & Profit (15%)", estimatedCost: "₹90/unit", notes: "Standard margin" },
-  ],
-  processAnalysis: {
-    recommendedProcess: "CNC Machining",
-    alternativeProcess: "Die Casting (>500 units)",
-    keyMachiningChallenges: ["Thin 2mm wall sections", "Deep internal pockets", "Thread inserts (M4 Helicoil)"],
-    estimatedCycleTime: "1.8 hrs/part",
-    suggestedToleranceCapability: "±0.02mm on critical bores",
-    fixtureComplexity: "Medium — custom soft jaw recommended",
-    recommendedMachineType: "VMC 3-axis (BT40 spindle)",
-  },
-  designRiskAnalysis: {
-    thinWallRisks: "2mm sections near boss features may cause chatter — reduce feed rate",
-    toolAccessibility: "All features accessible from 3 setups",
-    warpageRisks: "Low — symmetric geometry minimises residual stress",
-    tightToleranceRisks: "H7 bore tolerance achievable with reaming",
-    surfaceFinishRisks: "Ra 1.6 achievable with finish pass",
-    threadingRisks: "M4 threads — specify Helicoil inserts for durability",
-    deepPocketRisks: "Pocket depth-to-width ratio within limits",
-    dieCastingPorosityRisks: "N/A — CNC machined from billet",
-  },
-  costReductionIdeas: [
-    "Switch to Die Casting at 500+ units — saves ~35% on per-unit cost (tooling ~₹1.5L)",
-    "Simplify internal pocket geometry — saves ~12% machining time (20 min/part)",
-    "Combine anodise batches with other parts — saves ~8% on finishing cost",
-  ],
-  confidenceLevel: "Medium",
-  confidenceExplanation: "Demo mode — add ANTHROPIC_API_KEY for real AI-powered analysis of your actual drawings.",
-  rawMarkdown: "",
-};
+const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
 function buildUserMessage(req: AnalyzeRequest): Anthropic.MessageParam {
   const textBlock: Messages.TextBlockParam = {
@@ -104,64 +53,9 @@ Respond ONLY with raw JSON matching the specified format. No markdown fences, no
   return { role: "user", content };
 }
 
-function repairTruncatedJson(raw: string): string {
-  let s = raw.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/i, "").trim();
-
-  try {
-    JSON.parse(s);
-    return s;
-  } catch {
-    const opens: string[] = [];
-    let inString = false;
-    let escape = false;
-
-    for (let i = 0; i < s.length; i++) {
-      const ch = s[i];
-      if (escape) { escape = false; continue; }
-      if (ch === "\\" && inString) { escape = true; continue; }
-      if (ch === '"') { inString = !inString; continue; }
-      if (inString) continue;
-      if (ch === "{" || ch === "[") opens.push(ch);
-      else if (ch === "}" || ch === "]") opens.pop();
-    }
-
-    if (inString) {
-      const lastComma = s.lastIndexOf(",");
-      if (lastComma > 0) s = s.slice(0, lastComma);
-    }
-
-    for (let i = opens.length - 1; i >= 0; i--) {
-      s += opens[i] === "{" ? "}" : "]";
-    }
-
-    return s;
-  }
-}
-
-const BULLET_RE = /^[•‣◦⁃∙•‣◦⁃∙\-\*]\s*/;
-
-function cleanStr(s: unknown): string {
-  if (typeof s !== "string") return String(s ?? "");
-  return s.replace(BULLET_RE, "").trim();
-}
-
-// Recursively strip bullet chars from every string in any object/array
-function deepClean<T>(val: T): T {
-  if (typeof val === "string") return cleanStr(val) as unknown as T;
-  if (Array.isArray(val)) return val.map(deepClean) as unknown as T;
-  if (val !== null && typeof val === "object") {
-    const out: Record<string, unknown> = {};
-    for (const [k, v] of Object.entries(val as Record<string, unknown>)) {
-      out[k] = deepClean(v);
-    }
-    return out as unknown as T;
-  }
-  return val;
-}
-
 function parseCostingResult(raw: string): CostingResult {
-  const repaired = repairTruncatedJson(raw);
-  const parsed = deepClean(JSON.parse(repaired));
+  const cleaned = raw.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/i, "").trim();
+  const parsed = JSON.parse(cleaned);
   return {
     partSummary: parsed.partSummary ?? {},
     costBreakdown: Array.isArray(parsed.costBreakdown) ? parsed.costBreakdown : [],
@@ -180,13 +74,9 @@ export async function POST(request: NextRequest) {
     if (!body.files || body.files.length === 0) {
       return NextResponse.json({ error: "No files provided." }, { status: 400 });
     }
-    if (DEMO_MODE) {
-      await new Promise((r) => setTimeout(r, 1500));
-      return NextResponse.json({ result: DEMO_RESULT });
-    }
-    const message = await client!.messages.create({
+    const message = await client.messages.create({
       model: "claude-sonnet-4-6",
-      max_tokens: 8192,
+      max_tokens: 4096,
       system: SYSTEM_PROMPT,
       messages: [buildUserMessage(body)],
     });

@@ -122,9 +122,9 @@ export function VendorCard({ match, onGenerateRFQ }: Props) {
             Capabilities
           </p>
           <div className="flex flex-wrap gap-1.5">
-            {vendor.processCapabilities.map((cap, i) => (
+            {vendor.processCapabilities.map((cap) => (
               <span
-                key={i}
+                key={cap}
                 className="rounded-full bg-blue-50 border border-blue-100 px-2.5 py-0.5 text-xs text-blue-700 font-medium"
               >
                 {cap}
@@ -140,9 +140,9 @@ export function VendorCard({ match, onGenerateRFQ }: Props) {
             Certifications
           </p>
           <div className="flex flex-wrap gap-1.5">
-            {vendor.certifications.map((cert, i) => (
+            {vendor.certifications.map((cert) => (
               <span
-                key={i}
+                key={cert}
                 className="inline-flex items-center gap-1 rounded-full bg-emerald-50 border border-emerald-100 px-2.5 py-0.5 text-xs text-emerald-700 font-medium"
               >
                 <Award className="h-3 w-3" />
