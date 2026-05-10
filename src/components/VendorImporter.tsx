@@ -362,8 +362,8 @@ export function VendorImporter() {
                       </td>
                       <td className="px-4 py-3 text-slate-600 hidden sm:table-cell">
                         <div className="flex flex-wrap gap-1">
-                          {vendor.processCapabilities.slice(0, 3).map((cap) => (
-                            <span key={cap} className="rounded-full bg-blue-50 px-2 py-0.5 text-xs text-blue-700">
+                          {vendor.processCapabilities.slice(0, 3).map((cap, i) => (
+                            <span key={i} className="rounded-full bg-blue-50 px-2 py-0.5 text-xs text-blue-700">
                               {cap}
                             </span>
                           ))}
