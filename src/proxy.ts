@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export async function proxy(_request: NextRequest) {
-  return NextResponse.next();
+  const response = NextResponse.next();
+  // Clear any leftover session cookie from the old auth system
+  response.cookies.delete("astra_session");
+  return response;
 }
 
 export const config = {
