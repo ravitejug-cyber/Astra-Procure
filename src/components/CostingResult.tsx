@@ -171,8 +171,8 @@ export function CostingResult({ result }: Props) {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
-                    {lineItems.map((row) => (
-                      <tr key={row.item} className="hover:bg-slate-50/60 transition-colors">
+                    {lineItems.map((row, i) => (
+                      <tr key={i} className="hover:bg-slate-50/60 transition-colors">
                         <td className="px-4 py-2.5 text-slate-700">{row.item}</td>
                         <td className="px-4 py-2.5 text-right font-mono font-medium text-slate-800 whitespace-nowrap">{row.estimatedCost}</td>
                         <td className="px-4 py-2.5 text-xs text-slate-400 hidden sm:table-cell">{row.notes}</td>
