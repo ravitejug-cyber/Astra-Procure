@@ -14,9 +14,12 @@ function buildUserMessage(req: AnalyzeRequest): Anthropic.MessageParam {
 Region: ${req.region}
 Batch Quantity: ${req.batchQuantity.toLocaleString()} units
 Preferred Manufacturing Method: ${req.preferredMethod}
+${req.material ? `RAW MATERIAL (USER SPECIFIED — YOU MUST USE THIS EXACTLY): ${req.material}` : ""}
 ${req.additionalNotes ? `Additional Notes: ${req.additionalNotes}` : ""}
 
 Files uploaded: ${req.files.map((f) => f.name).join(", ")}
+
+${req.material ? `IMPORTANT: The user has explicitly specified the raw material as "${req.material}". Use this exact material for ALL cost calculations including material rate, machinability factor, machining time, surface finish, and tooling. Do NOT override this with any material you see in the drawing.` : "Identify the raw material from the drawing and use it for all calculations."}
 
 Respond ONLY with raw JSON matching the specified format. No markdown fences, no extra text.`,
   };

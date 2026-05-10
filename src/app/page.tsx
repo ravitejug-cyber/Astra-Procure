@@ -29,6 +29,7 @@ export default function Home() {
   const [region, setRegion] = useState<Region>("India");
   const [batchQty, setBatchQty] = useState<number>(100);
   const [method, setMethod] = useState<ManufacturingMethod>("Auto");
+  const [material, setMaterial] = useState("");
   const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -50,7 +51,7 @@ export default function Home() {
 
   const buildDiscoveryRequest = (): DiscoveryRequest => ({
     manufacturingMethod: result?.partSummary?.manufacturingMethod ?? (method === "Auto" ? "CNC Machining" : method),
-    material: result?.partSummary?.material ?? "Unknown",
+    material: material.trim() || result?.partSummary?.material || "Unknown",
     toleranceLevel: "±0.05mm",
     batchQuantity: batchQty,
     surfaceFinish: "As per drawing",
@@ -72,7 +73,7 @@ export default function Home() {
       const res = await fetch("/api/analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ files, region, batchQuantity: batchQty, preferredMethod: method, additionalNotes: notes || undefined }),
+        body: JSON.stringify({ files, region, batchQuantity: batchQty, preferredMethod: method, material: material.trim() || undefined, additionalNotes: notes || undefined }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Analysis failed.");
@@ -177,6 +178,13 @@ export default function Home() {
                     min={1}
                     value={batchQty}
                     onChange={(e) => setBatchQty(Math.max(1, parseInt(e.target.value) || 1))}
+                  />
+
+                  <Input
+                    label="Raw Material"
+                    value={material}
+                    onChange={(e) => setMaterial(e.target.value)}
+                    placeholder="e.g. Al 6061-T6, SS316L, EN8, Brass C360"
                   />
 
                   <Select label="Preferred Manufacturing Method" value={method} onChange={(e) => setMethod(e.target.value as ManufacturingMethod)}>

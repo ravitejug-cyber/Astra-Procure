@@ -77,5 +77,6 @@ export interface AnalyzeRequest {
   region: Region;
   batchQuantity: number;
   preferredMethod: ManufacturingMethod;
+  material?: string;
   additionalNotes?: string;
 }
