@@ -4,7 +4,58 @@ import type { Messages } from "@anthropic-ai/sdk/resources";
 import { SYSTEM_PROMPT } from "@/lib/systemPrompt";
 import type { AnalyzeRequest, CostingResult } from "@/lib/types";
 
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+const DEMO_MODE = !process.env.ANTHROPIC_API_KEY;
+const client = DEMO_MODE ? null : new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+
+const DEMO_RESULT: CostingResult = {
+  partSummary: {
+    partName: "Aluminium Housing (Demo)",
+    material: "Al 6061-T6",
+    manufacturingMethod: "CNC Machining",
+    complexityLevel: "Medium",
+    estimatedWeight: "1.24 kg",
+    machiningTimeHours: "1.8 hrs",
+    helicoilCost: "₹120/unit",
+    manpowerCostPerUnit: "₹380/unit",
+    rawMaterialMarketPrice: "₹310/kg",
+    suggestedBatchSize: "100 units",
+    estimatedAnnualVolume: "1,200 units/year",
+  },
+  costBreakdown: [
+    { item: "Raw Material (Al 6061-T6)", estimatedCost: "₹310/unit", notes: "@ ₹250/kg, 1.24 kg stock" },
+    { item: "CNC Machining (3-axis)", estimatedCost: "₹420/unit", notes: "1.8 hrs @ ₹230/hr" },
+    { item: "Surface Finish (Anodize Type II)", estimatedCost: "₹85/unit", notes: "Batch anodising" },
+    { item: "Tooling (amortised)", estimatedCost: "₹60/unit", notes: "Over 100 units" },
+    { item: "Overhead & Profit (15%)", estimatedCost: "₹90/unit", notes: "Standard margin" },
+  ],
+  processAnalysis: {
+    recommendedProcess: "CNC Machining",
+    alternativeProcess: "Die Casting (>500 units)",
+    keyMachiningChallenges: ["Thin 2mm wall sections", "Deep internal pockets", "Thread inserts (M4 Helicoil)"],
+    estimatedCycleTime: "1.8 hrs/part",
+    suggestedToleranceCapability: "±0.02mm on critical bores",
+    fixtureComplexity: "Medium — custom soft jaw recommended",
+    recommendedMachineType: "VMC 3-axis (BT40 spindle)",
+  },
+  designRiskAnalysis: {
+    thinWallRisks: "2mm sections near boss features may cause chatter — reduce feed rate",
+    toolAccessibility: "All features accessible from 3 setups",
+    warpageRisks: "Low — symmetric geometry minimises residual stress",
+    tightToleranceRisks: "H7 bore tolerance achievable with reaming",
+    surfaceFinishRisks: "Ra 1.6 achievable with finish pass",
+    threadingRisks: "M4 threads — specify Helicoil inserts for durability",
+    deepPocketRisks: "Pocket depth-to-width ratio within limits",
+    dieCastingPorosityRisks: "N/A — CNC machined from billet",
+  },
+  costReductionIdeas: [
+    "Switch to Die Casting at 500+ units — saves ~35% on per-unit cost (tooling ~₹1.5L)",
+    "Simplify internal pocket geometry — saves ~12% machining time (20 min/part)",
+    "Combine anodise batches with other parts — saves ~8% on finishing cost",
+  ],
+  confidenceLevel: "Medium",
+  confidenceExplanation: "Demo mode — add ANTHROPIC_API_KEY for real AI-powered analysis of your actual drawings.",
+  rawMarkdown: "",
+};
 
 function buildUserMessage(req: AnalyzeRequest): Anthropic.MessageParam {
   const textBlock: Messages.TextBlockParam = {
@@ -108,7 +159,11 @@ export async function POST(request: NextRequest) {
     if (!body.files || body.files.length === 0) {
       return NextResponse.json({ error: "No files provided." }, { status: 400 });
     }
-    const message = await client.messages.create({
+    if (DEMO_MODE) {
+      await new Promise((r) => setTimeout(r, 1500));
+      return NextResponse.json({ result: DEMO_RESULT });
+    }
+    const message = await client!.messages.create({
       model: "claude-sonnet-4-6",
       max_tokens: 8192,
       system: SYSTEM_PROMPT,
