@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { BarChart3, History, Loader2, Send, Zap, Factory, LogOut } from "lucide-react";
+import { BarChart3, History, Loader2, Send, Zap, Factory } from "lucide-react";
 import { FileUploader } from "@/components/FileUploader";
 import { CostingResult } from "@/components/CostingResult";
 import { ProjectHistory } from "@/components/ProjectHistory";
@@ -37,11 +37,6 @@ export default function Home() {
   const [discoverTrigger, setDiscoverTrigger] = useState(0);
 
   const addProject = useProjectStore((s) => s.addProject);
-
-  const handleLogout = async () => {
-    await fetch("/api/auth/logout", { method: "POST" });
-    window.location.href = "/login";
-  };
 
   const handleFindVendors = (entry?: ProjectEntry) => {
     if (entry) {
@@ -133,31 +128,21 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            <nav className="flex gap-1">
-              {tabConfig.map(({ key, label, icon }) => (
-                <button
-                  key={key}
-                  onClick={() => setActiveTab(key)}
-                  className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all capitalize
-                    ${activeTab === key
-                      ? "bg-blue-50 text-blue-700 shadow-sm"
-                      : "text-slate-500 hover:text-slate-800 hover:bg-slate-100"}`}
-                >
-                  {icon}
-                  {label}
-                </button>
-              ))}
-            </nav>
-            <button
-              onClick={handleLogout}
-              className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-400 hover:text-red-600 hover:bg-red-50 transition-all"
-              title="Sign out"
-            >
-              <LogOut className="h-3.5 w-3.5" />
-              <span className="hidden sm:inline">Sign out</span>
-            </button>
-          </div>
+          <nav className="flex gap-1">
+            {tabConfig.map(({ key, label, icon }) => (
+              <button
+                key={key}
+                onClick={() => setActiveTab(key)}
+                className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all capitalize
+                  ${activeTab === key
+                    ? "bg-blue-50 text-blue-700 shadow-sm"
+                    : "text-slate-500 hover:text-slate-800 hover:bg-slate-100"}`}
+              >
+                {icon}
+                {label}
+              </button>
+            ))}
+          </nav>
         </div>
       </header>
 
