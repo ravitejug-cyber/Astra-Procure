@@ -28,7 +28,15 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-slate-50">{children}</body>
+      <body className="min-h-full flex flex-col bg-slate-50">
+        {/* Patch btoa to tolerate non-Latin1 chars (U+2022 etc.) from React internals */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){var b=window.btoa.bind(window);window.btoa=function(s){return b(s.replace(/[^\\x00-\\xFF]/g,'?'));};})();`,
+          }}
+        />
+        {children}
+      </body>
     </html>
   );
 }
