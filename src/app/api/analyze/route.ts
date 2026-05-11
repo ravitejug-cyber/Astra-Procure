@@ -66,8 +66,35 @@ function deepClean<T>(val: T): T {
   return val;
 }
 
+function repairTruncatedJson(raw: string): string {
+  let s = raw.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/i, "").trim();
+  try {
+    JSON.parse(s);
+    return s;
+  } catch {
+    const opens: string[] = [];
+    let inString = false;
+    let escape = false;
+    for (let i = 0; i < s.length; i++) {
+      const ch = s[i];
+      if (escape) { escape = false; continue; }
+      if (ch === "\\" && inString) { escape = true; continue; }
+      if (ch === '"') { inString = !inString; continue; }
+      if (inString) continue;
+      if (ch === "{" || ch === "[") opens.push(ch);
+      else if (ch === "}" || ch === "]") opens.pop();
+    }
+    if (inString) {
+      const lastComma = s.lastIndexOf(",");
+      if (lastComma > 0) s = s.slice(0, lastComma);
+    }
+    for (let i = opens.length - 1; i >= 0; i--) s += opens[i] === "{" ? "}" : "]";
+    return s;
+  }
+}
+
 function parseCostingResult(raw: string): CostingResult {
-  const cleaned = raw.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/i, "").trim();
+  const cleaned = repairTruncatedJson(raw);
   const parsed = deepClean(JSON.parse(cleaned));
   return {
     partSummary: parsed.partSummary ?? {},
@@ -89,7 +116,7 @@ export async function POST(request: NextRequest) {
     }
     const message = await client.messages.create({
       model: "claude-sonnet-4-6",
-      max_tokens: 4096,
+      max_tokens: 8192,
       system: SYSTEM_PROMPT,
       messages: [buildUserMessage(body)],
     });
