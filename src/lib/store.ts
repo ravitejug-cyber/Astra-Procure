@@ -41,7 +41,7 @@ export const useProjectStore = create<ProjectStore>()(
       clearAll: () => set({ projects: [] }),
     }),
     {
-      name: "astra-procure-projects",
+      name: "astra-procure-projects-v2",
       storage: createJSONStorage(() => localStorage),
       // Sanitize any bullet chars in persisted data on every rehydration
       merge: (persisted: unknown, current) => {
