@@ -43,7 +43,7 @@ function repairTruncatedJson(raw: string): string {
   }
 }
 
-const BULLET_RE = /[•‣◦⁃∙]+/g;
+const BULLET_RE = /[\u2022\u2023\u25e6\u2043\u2219]+/g;
 const LEADING_WS_RE = /^\s+/;
 function cleanStr(s: unknown): string {
   if (typeof s !== "string") return String(s ?? "");
@@ -94,7 +94,7 @@ export async function POST(req: NextRequest) {
     let systemPrompt = buildVendorPrompt(body.request);
 
     if (body.importedVendors && body.importedVendors.length > 0) {
-      systemPrompt += `\n\nADDITIONAL CONTEXT — IMPORTED VENDORS FROM USER DATABASE:\nThe user has ${body.importedVendors.length} vendors in their database. Evaluate each and include the best-matching ones in your results, marking their "source" field as "imported". Here are the imported vendors:\n${JSON.stringify(body.importedVendors, null, 2)}\n\nWhen including imported vendors in matches, use their exact data (name, city, certifications, etc.) but generate appropriate suitabilityScore, matchReasons, riskFlags, and recommendation based on the part requirements.`;
+      systemPrompt += `\n\nADDITIONAL CONTEXT - IMPORTED VENDORS FROM USER DATABASE:\nThe user has ${body.importedVendors.length} vendors in their database. Evaluate each and include the best-matching ones in your results, marking their "source" field as "imported". Here are the imported vendors:\n${JSON.stringify(body.importedVendors, null, 2)}\n\nWhen including imported vendors in matches, use their exact data (name, city, certifications, etc.) but generate appropriate suitabilityScore, matchReasons, riskFlags, and recommendation based on the part requirements.`;
     }
 
     const message = await client.messages.create({

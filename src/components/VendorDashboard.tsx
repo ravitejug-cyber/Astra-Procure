@@ -151,7 +151,7 @@ export function VendorDashboard({ costingResult, discoveryRequest, discoverTrigg
                       <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
                     </div>
                     <div className="text-center">
-                      <p className="font-semibold text-slate-800">Discovering vendors…</p>
+                      <p className="font-semibold text-slate-800">Discovering vendors...</p>
                       <p className="text-sm text-slate-400 mt-1">
                         Analysing Indian manufacturing ecosystem for best matches
                       </p>

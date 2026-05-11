@@ -95,10 +95,10 @@ export function FileUploader({ files, onChange }: FileUploaderProps) {
           </div>
           <div>
             <p className="text-sm font-medium text-slate-700">
-              {isDragActive ? "Drop files here…" : "Drag & drop files, or click to browse"}
+              {isDragActive ? "Drop files here..." : "Drag & drop files, or click to browse"}
             </p>
             <p className="mt-1 text-xs text-slate-400">
-              PDF, DXF, STEP, JPG, PNG — up to 20 MB each, max 10 files
+              PDF, DXF, STEP, JPG, PNG - up to 20 MB each, max 10 files
             </p>
           </div>
         </div>

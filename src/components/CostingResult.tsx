@@ -65,7 +65,7 @@ export function CostingResult({ result }: Props) {
             </div>
             <div className="min-w-0">
               <p className="font-semibold text-slate-900 text-sm leading-tight truncate">{ps.partName}</p>
-              <p className="text-xs text-slate-500 truncate">{ps.manufacturingMethod} · {ps.material}</p>
+              <p className="text-xs text-slate-500 truncate">{ps.manufacturingMethod} . {ps.material}</p>
             </div>
           </div>
           <div className="flex items-center gap-2 shrink-0">
@@ -93,21 +93,21 @@ export function CostingResult({ result }: Props) {
             <Clock className="h-4 w-4 text-slate-400 shrink-0" />
             <div className="min-w-0">
               <p className="text-xs text-slate-400">Machining Time</p>
-              <p className="text-sm font-semibold text-slate-800 truncate">{ps.machiningTimeHours ?? "—"}</p>
+              <p className="text-sm font-semibold text-slate-800 truncate">{ps.machiningTimeHours ?? "-"}</p>
             </div>
           </div>
           <div className="px-4 py-3 flex items-center gap-2">
             <Users className="h-4 w-4 text-slate-400 shrink-0" />
             <div className="min-w-0">
               <p className="text-xs text-slate-400">Manpower Cost</p>
-              <p className="text-sm font-semibold text-slate-800 truncate">{ps.manpowerCostPerUnit ?? "—"}</p>
+              <p className="text-sm font-semibold text-slate-800 truncate">{ps.manpowerCostPerUnit ?? "-"}</p>
             </div>
           </div>
           <div className="px-4 py-3 flex items-center gap-2">
             <PackageSearch className="h-4 w-4 text-slate-400 shrink-0" />
             <div className="min-w-0">
               <p className="text-xs text-slate-400">Raw Material Rate</p>
-              <p className="text-sm font-semibold text-slate-800 truncate">{ps.rawMaterialMarketPrice ?? "—"}</p>
+              <p className="text-sm font-semibold text-slate-800 truncate">{ps.rawMaterialMarketPrice ?? "-"}</p>
             </div>
           </div>
         </div>
