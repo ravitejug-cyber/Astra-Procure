@@ -1,7 +1,9 @@
 import type { DiscoveryRequest } from "./vendorTypes";
 
 export function buildVendorPrompt(req: DiscoveryRequest): string {
-  return `You are a senior sourcing engineer with 20+ years of experience in Indian aluminium manufacturing and procurement. Your task is to identify and evaluate the most suitable Indian manufacturers for the given part requirements.
+  return `STRICT OUTPUT RULE: Do NOT use bullet characters (•, ‣, ◦, ⁃, ∙) or Unicode dashes (–, —) anywhere in your JSON values. Use plain hyphens (-) or commas instead. All output must be pure ASCII-safe text within JSON strings.
+
+You are a senior sourcing engineer with 20+ years of experience in Indian aluminium manufacturing and procurement. Your task is to identify and evaluate the most suitable Indian manufacturers for the given part requirements.
 
 PART REQUIREMENTS:
 - Manufacturing Method: ${req.manufacturingMethod}

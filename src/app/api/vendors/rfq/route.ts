@@ -11,9 +11,20 @@ interface RFQRequestBody {
   request: DiscoveryRequest;
 }
 
+function deepClean<T>(val: T): T {
+  if (typeof val === "string") return val.replace(/[•‣◦⁃∙–—]+/g, "").trimStart() as unknown as T;
+  if (Array.isArray(val)) return val.map(deepClean) as unknown as T;
+  if (val !== null && typeof val === "object") {
+    const out: Record<string, unknown> = {};
+    for (const [k, v] of Object.entries(val as Record<string, unknown>)) out[k] = deepClean(v);
+    return out as unknown as T;
+  }
+  return val;
+}
+
 function parseRFQTemplate(raw: string): RFQTemplate {
   const cleaned = raw.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/i, "").trim();
-  const parsed = JSON.parse(cleaned);
+  const parsed = deepClean(JSON.parse(cleaned));
   return {
     vendorName: parsed.vendorName ?? "",
     subject: parsed.subject ?? "",
