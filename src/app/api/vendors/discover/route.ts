@@ -3,6 +3,8 @@ import Anthropic from "@anthropic-ai/sdk";
 import { buildVendorPrompt } from "@/lib/vendorSystemPrompt";
 import type { DiscoveryRequest, Vendor, VendorDiscoveryResult } from "@/lib/vendorTypes";
 
+export const maxDuration = 120;
+
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
 function repairTruncatedJson(raw: string): string {
