@@ -52,7 +52,7 @@ export default function Home() {
   const buildDiscoveryRequest = (): DiscoveryRequest => ({
     manufacturingMethod: result?.partSummary?.manufacturingMethod ?? (method === "Auto" ? "CNC Machining" : method),
     material: material.trim() || result?.partSummary?.material || "Unknown",
-    toleranceLevel: "±0.05mm",
+    toleranceLevel: "+/-0.05mm",
     batchQuantity: batchQty,
     surfaceFinish: "As per drawing",
     complexity: result?.partSummary?.complexityLevel ?? "Medium",
@@ -197,7 +197,7 @@ export default function Home() {
 
                   <Textarea
                     label="Additional Notes (optional)"
-                    placeholder="e.g. tight tolerances on bore, anodize type II required…"
+                    placeholder="e.g. tight tolerances on bore, anodize type II required..."
                     rows={3}
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
@@ -212,7 +212,7 @@ export default function Home() {
 
                   <Button className="w-full" size="lg" onClick={handleSubmit} disabled={loading || files.length === 0}>
                     {loading ? (
-                      <><Loader2 className="h-4 w-4 animate-spin" />Analyzing…</>
+                      <><Loader2 className="h-4 w-4 animate-spin" />Analyzing...</>
                     ) : (
                       <><Send className="h-4 w-4" />Run Cost Analysis</>
                     )}
@@ -228,7 +228,7 @@ export default function Home() {
                     <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
                   </div>
                   <div className="text-center">
-                    <p className="font-semibold text-slate-800">Analyzing engineering files…</p>
+                    <p className="font-semibold text-slate-800">Analyzing engineering files...</p>
                     <p className="text-sm text-slate-400 mt-1">Extracting dimensions, tolerances, and material data</p>
                   </div>
                 </div>

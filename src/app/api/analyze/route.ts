@@ -14,7 +14,7 @@ function buildUserMessage(req: AnalyzeRequest): Anthropic.MessageParam {
 Region: ${req.region}
 Batch Quantity: ${req.batchQuantity.toLocaleString()} units
 Preferred Manufacturing Method: ${req.preferredMethod}
-${req.material ? `RAW MATERIAL (USER SPECIFIED — YOU MUST USE THIS EXACTLY): ${req.material}` : ""}
+${req.material ? `RAW MATERIAL (USER SPECIFIED - YOU MUST USE THIS EXACTLY): ${req.material}` : ""}
 ${req.additionalNotes ? `Additional Notes: ${req.additionalNotes}` : ""}
 
 Files uploaded: ${req.files.map((f) => f.name).join(", ")}
@@ -53,9 +53,27 @@ Respond ONLY with raw JSON matching the specified format. No markdown fences, no
   return { role: "user", content };
 }
 
+// Strip Unicode bullet chars that the AI uses as list decorators anywhere in strings
+const BULLET_RE = /[\u2022\u2023\u25e6\u2043\u2219]+/g;
+const LEADING_WS_RE = /^\s+/;
+function cleanStr(s: unknown): string {
+  if (typeof s !== "string") return String(s ?? "");
+  return s.replace(BULLET_RE, "").replace(LEADING_WS_RE, "").trim();
+}
+function deepClean<T>(val: T): T {
+  if (typeof val === "string") return cleanStr(val) as unknown as T;
+  if (Array.isArray(val)) return val.map(deepClean) as unknown as T;
+  if (val !== null && typeof val === "object") {
+    const out: Record<string, unknown> = {};
+    for (const [k, v] of Object.entries(val as Record<string, unknown>)) out[k] = deepClean(v);
+    return out as unknown as T;
+  }
+  return val;
+}
+
 function parseCostingResult(raw: string): CostingResult {
   const cleaned = raw.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/i, "").trim();
-  const parsed = JSON.parse(cleaned);
+  const parsed = deepClean(JSON.parse(cleaned));
   return {
     partSummary: parsed.partSummary ?? {},
     costBreakdown: Array.isArray(parsed.costBreakdown) ? parsed.costBreakdown : [],

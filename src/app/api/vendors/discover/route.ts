@@ -43,11 +43,33 @@ function repairTruncatedJson(raw: string): string {
   }
 }
 
+const BULLET_RE = /[\u2022\u2023\u25e6\u2043\u2219]+/g;
+const LEADING_WS_RE = /^\s+/;
+function cleanStr(s: unknown): string {
+  if (typeof s !== "string") return String(s ?? "");
+  return s.replace(BULLET_RE, "").replace(LEADING_WS_RE, "").trim();
+}
+function deepClean<T>(val: T): T {
+  if (typeof val === "string") return cleanStr(val) as unknown as T;
+  if (Array.isArray(val)) return val.map(deepClean) as unknown as T;
+  if (val !== null && typeof val === "object") {
+    const out: Record<string, unknown> = {};
+    for (const [k, v] of Object.entries(val as Record<string, unknown>)) out[k] = deepClean(v);
+    return out as unknown as T;
+  }
+  return val;
+}
+
 function parseVendorResult(raw: string): VendorDiscoveryResult {
   const repaired = repairTruncatedJson(raw);
-  const parsed = JSON.parse(repaired);
+  const parsed = deepClean(JSON.parse(repaired));
   return {
-    matches: Array.isArray(parsed.matches) ? parsed.matches : [],
+    matches: Array.isArray(parsed.matches)
+      ? parsed.matches.map((m: Record<string, unknown>) => ({
+          ...m,
+          vendor: m.vendor ? { ...(m.vendor as Record<string, unknown>), id: crypto.randomUUID() } : m.vendor,
+        }))
+      : [],
     sourcingRisks: Array.isArray(parsed.sourcingRisks) ? parsed.sourcingRisks : [],
     rfqStrategy: parsed.rfqStrategy ?? "",
     recommendedSuppliersCount: parsed.recommendedSuppliersCount ?? 0,
@@ -72,7 +94,7 @@ export async function POST(req: NextRequest) {
     let systemPrompt = buildVendorPrompt(body.request);
 
     if (body.importedVendors && body.importedVendors.length > 0) {
-      systemPrompt += `\n\nADDITIONAL CONTEXT — IMPORTED VENDORS FROM USER DATABASE:\nThe user has ${body.importedVendors.length} vendors in their database. Evaluate each and include the best-matching ones in your results, marking their "source" field as "imported". Here are the imported vendors:\n${JSON.stringify(body.importedVendors, null, 2)}\n\nWhen including imported vendors in matches, use their exact data (name, city, certifications, etc.) but generate appropriate suitabilityScore, matchReasons, riskFlags, and recommendation based on the part requirements.`;
+      systemPrompt += `\n\nADDITIONAL CONTEXT - IMPORTED VENDORS FROM USER DATABASE:\nThe user has ${body.importedVendors.length} vendors in their database. Evaluate each and include the best-matching ones in your results, marking their "source" field as "imported". Here are the imported vendors:\n${JSON.stringify(body.importedVendors, null, 2)}\n\nWhen including imported vendors in matches, use their exact data (name, city, certifications, etc.) but generate appropriate suitabilityScore, matchReasons, riskFlags, and recommendation based on the part requirements.`;
     }
 
     const message = await client.messages.create({

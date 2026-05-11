@@ -109,7 +109,7 @@ export function VendorCard({ match, onGenerateRFQ }: Props) {
         <div className="flex items-center justify-between text-xs text-slate-500 font-medium">
           <span>Suitability Score</span>
           <span className="text-slate-400">
-            Technical {match.technicalScore} · Quality {match.qualityScore} ·
+            Technical {match.technicalScore} . Quality {match.qualityScore} .
             Commercial {match.commercialScore}
           </span>
         </div>
@@ -122,9 +122,9 @@ export function VendorCard({ match, onGenerateRFQ }: Props) {
             Capabilities
           </p>
           <div className="flex flex-wrap gap-1.5">
-            {vendor.processCapabilities.map((cap) => (
+            {vendor.processCapabilities.map((cap, i) => (
               <span
-                key={cap}
+                key={i}
                 className="rounded-full bg-blue-50 border border-blue-100 px-2.5 py-0.5 text-xs text-blue-700 font-medium"
               >
                 {cap}
@@ -140,9 +140,9 @@ export function VendorCard({ match, onGenerateRFQ }: Props) {
             Certifications
           </p>
           <div className="flex flex-wrap gap-1.5">
-            {vendor.certifications.map((cert) => (
+            {vendor.certifications.map((cert, i) => (
               <span
-                key={cert}
+                key={i}
                 className="inline-flex items-center gap-1 rounded-full bg-emerald-50 border border-emerald-100 px-2.5 py-0.5 text-xs text-emerald-700 font-medium"
               >
                 <Award className="h-3 w-3" />
