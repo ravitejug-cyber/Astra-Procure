@@ -52,6 +52,11 @@ export default function RootLayout({
               `  if(e&&e.message&&e.message.indexOf('ByteString')!==-1)e.preventDefault();`,
               `},true);`,
               `})();`,
+              // Purge stale localStorage keys that may contain bullet chars
+              `(function(){try{`,
+              `var STALE=['astra-procure-projects'];`,
+              `STALE.forEach(function(k){localStorage.removeItem(k);});`,
+              `}catch(e){}})();`,
             ].join(""),
           }}
         />
