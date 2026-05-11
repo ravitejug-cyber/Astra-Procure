@@ -53,15 +53,8 @@ Respond ONLY with raw JSON matching the specified format. No markdown fences, no
   return { role: "user", content };
 }
 
-// Strip Unicode bullet chars that the AI uses as list decorators anywhere in strings
-const BULLET_RE = /[\u2022\u2023\u25e6\u2043\u2219]+/g;
-const LEADING_WS_RE = /^\s+/;
-function cleanStr(s: unknown): string {
-  if (typeof s !== "string") return String(s ?? "");
-  return s.replace(BULLET_RE, "").replace(LEADING_WS_RE, "").trim();
-}
 function deepClean<T>(val: T): T {
-  if (typeof val === "string") return cleanStr(val) as unknown as T;
+  if (typeof val === "string") return val.replace(/[\u2022\u2023\u25e6\u2043\u2219\u2013\u2014]+/g, "").trimStart() as unknown as T;
   if (Array.isArray(val)) return val.map(deepClean) as unknown as T;
   if (val !== null && typeof val === "object") {
     const out: Record<string, unknown> = {};
