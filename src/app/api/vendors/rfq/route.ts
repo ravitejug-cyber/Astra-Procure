@@ -41,7 +41,7 @@ Generate a complete RFQ package that is professional, specific, and actionable. 
 - Include commercial terms requirements (payment terms, warranty, packaging)
 - Be warm but professional in tone
 
-RESPOND ONLY WITH VALID JSON — NO MARKDOWN FENCES, NO EXTRA TEXT.
+RESPOND ONLY WITH VALID JSON - NO MARKDOWN FENCES, NO EXTRA TEXT.
 
 JSON schema:
 {

@@ -39,7 +39,7 @@ VENDOR PROFILE REQUIREMENTS:
 - Contact: realistic Indian phone numbers (+91-XX-XXXXXXXX or +91-XXXXXXXXXX)
 - Website: plausible Indian business domain (e.g., "www.precisiontechpune.com")
 
-RESPOND ONLY WITH VALID JSON — NO MARKDOWN FENCES, NO EXTRA TEXT, NO EXPLANATIONS.
+RESPOND ONLY WITH VALID JSON - NO MARKDOWN FENCES, NO EXTRA TEXT, NO EXPLANATIONS.
 
 The JSON must exactly match this schema:
 {

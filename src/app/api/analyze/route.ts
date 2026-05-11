@@ -14,7 +14,7 @@ function buildUserMessage(req: AnalyzeRequest): Anthropic.MessageParam {
 Region: ${req.region}
 Batch Quantity: ${req.batchQuantity.toLocaleString()} units
 Preferred Manufacturing Method: ${req.preferredMethod}
-${req.material ? `RAW MATERIAL (USER SPECIFIED — YOU MUST USE THIS EXACTLY): ${req.material}` : ""}
+${req.material ? `RAW MATERIAL (USER SPECIFIED - YOU MUST USE THIS EXACTLY): ${req.material}` : ""}
 ${req.additionalNotes ? `Additional Notes: ${req.additionalNotes}` : ""}
 
 Files uploaded: ${req.files.map((f) => f.name).join(", ")}
@@ -54,7 +54,7 @@ Respond ONLY with raw JSON matching the specified format. No markdown fences, no
 }
 
 // Strip Unicode bullet chars that the AI uses as list decorators anywhere in strings
-const BULLET_RE = /[•‣◦⁃∙]+/g;
+const BULLET_RE = /[\u2022\u2023\u25e6\u2043\u2219]+/g;
 const LEADING_WS_RE = /^\s+/;
 function cleanStr(s: unknown): string {
   if (typeof s !== "string") return String(s ?? "");

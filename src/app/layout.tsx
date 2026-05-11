@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AstraProcure — Aluminium Housing Costing Intelligence",
+  title: "AstraProcure - Aluminium Housing Costing Intelligence",
   description:
     "AI-powered manufacturing cost estimation for aluminium housings. Upload engineering drawings and get instant cost breakdowns, process analysis, and DFM insights.",
 };
@@ -31,7 +31,7 @@ export default function RootLayout({
       {/*
         Patch window.btoa in <head> so it runs before ANY body content or React
         SSR inline scripts. React 19 / Next.js 16 may call btoa() with strings
-        that contain U+2022 (bullet •, value 8226 > 255) during view-transition
+        that contain U+2022 (bullet \u2022, value 8226 > 255) during view-transition
         name generation, causing "Cannot convert argument to a ByteString".
         The error handler is a second layer that suppresses any residual errors.
       */}

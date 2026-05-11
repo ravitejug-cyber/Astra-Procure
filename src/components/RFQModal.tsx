@@ -85,7 +85,7 @@ export function RFQModal({ vendor, partDetails, request, onClose }: Props) {
                 <Loader2 className="h-7 w-7 animate-spin text-blue-600" />
               </div>
               <div className="text-center">
-                <p className="font-semibold text-slate-800">Generating RFQ…</p>
+                <p className="font-semibold text-slate-800">Generating RFQ...</p>
                 <p className="text-xs text-slate-400 mt-1">
                   Crafting a professional procurement email for {vendor.name}
                 </p>

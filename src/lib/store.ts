@@ -11,7 +11,7 @@ interface ProjectStore {
   clearAll: () => void;
 }
 
-const BULLET_RE = /[•‣◦⁃∙]+/g;
+const BULLET_RE = /[\u2022\u2023\u25e6\u2043\u2219]+/g;
 const LEADING_WS_RE = /^\s+/;
 function cleanStr(s: unknown): string {
   if (typeof s !== "string") return String(s ?? "");

@@ -187,7 +187,7 @@ export function VendorImporter() {
             <input {...getInputProps()} />
             <Upload className="mx-auto h-8 w-8 text-slate-300 mb-2" />
             <p className="text-sm text-slate-500">
-              {isDragActive ? "Drop the CSV file here…" : "Drag & drop a CSV file, or click to select"}
+              {isDragActive ? "Drop the CSV file here..." : "Drag & drop a CSV file, or click to select"}
             </p>
             <p className="text-xs text-slate-400 mt-1">
               Columns: Name, Process Capabilities, Machines, Material Expertise, City, State, MOQ, Certifications, Lead Time Days, Contact, Website, Industries, Notes

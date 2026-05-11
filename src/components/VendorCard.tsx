@@ -109,7 +109,7 @@ export function VendorCard({ match, onGenerateRFQ }: Props) {
         <div className="flex items-center justify-between text-xs text-slate-500 font-medium">
           <span>Suitability Score</span>
           <span className="text-slate-400">
-            Technical {match.technicalScore} · Quality {match.qualityScore} ·
+            Technical {match.technicalScore} . Quality {match.qualityScore} .
             Commercial {match.commercialScore}
           </span>
         </div>
