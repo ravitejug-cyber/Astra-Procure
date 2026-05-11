@@ -4,6 +4,8 @@ import type { Messages } from "@anthropic-ai/sdk/resources";
 import { SYSTEM_PROMPT } from "@/lib/systemPrompt";
 import type { AnalyzeRequest, CostingResult } from "@/lib/types";
 
+export const maxDuration = 120;
+
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
 function buildUserMessage(req: AnalyzeRequest): Anthropic.MessageParam {
