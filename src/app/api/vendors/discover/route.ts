@@ -43,10 +43,11 @@ function repairTruncatedJson(raw: string): string {
   }
 }
 
-const BULLET_RE = /^[•‣◦⁃∙․‥…·]+\s*/;
+const BULLET_RE = /[•‣◦⁃∙]+/g;
+const LEADING_WS_RE = /^\s+/;
 function cleanStr(s: unknown): string {
   if (typeof s !== "string") return String(s ?? "");
-  return s.replace(BULLET_RE, "").trim();
+  return s.replace(BULLET_RE, "").replace(LEADING_WS_RE, "").trim();
 }
 function deepClean<T>(val: T): T {
   if (typeof val === "string") return cleanStr(val) as unknown as T;
