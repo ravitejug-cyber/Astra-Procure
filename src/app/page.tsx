@@ -88,7 +88,6 @@ export default function Home() {
         result: costResult,
         notes: notes || undefined,
       });
-      setActiveTab("vendors");
     } catch (err) {
       setError(err instanceof Error ? err.message : "An unexpected error occurred.");
     } finally {

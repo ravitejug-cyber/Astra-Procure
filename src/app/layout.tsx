@@ -31,12 +31,10 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-slate-50">
         {/*
-          beforeInteractive injects /btoa-patch.js into the server HTML before
-          any Next.js/React module scripts are downloaded, guaranteeing
-          window.btoa is patched before the framework can call it with a
-          U+2022 bullet char (value 8226 > 255) in applyViewTransitionName.
-          It also wipes all astra-procure* localStorage keys so stale data
-          with bullet chars from old sessions cannot re-trigger the crash.
+          Secondary defence: patches window.btoa before React scripts load so
+          any U+2022 char reaching applyViewTransitionName is safely filtered.
+          Primary fix is the postinstall script that patches btoa() directly
+          inside the react-dom CJS files consumed by Turbopack.
         */}
         <Script strategy="beforeInteractive" src="/btoa-patch.js" />
         {children}
