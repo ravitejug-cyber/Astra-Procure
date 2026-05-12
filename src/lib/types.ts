@@ -59,6 +59,7 @@ export interface UploadedFile {
   type: string;
   size: number;
   dataUrl: string;
+  extractedText?: string; // populated for DWG/DXF files
 }
 
 export interface ProjectEntry {
