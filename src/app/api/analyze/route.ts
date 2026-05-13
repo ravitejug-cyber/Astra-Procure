@@ -28,6 +28,7 @@ Respond ONLY with raw JSON matching the specified format. No markdown fences, no
 
   const imageBlocks: Messages.ImageBlockParam[] = [];
   const documentBlocks: Messages.DocumentBlockParam[] = [];
+  const cadTextBlocks: Messages.TextBlockParam[] = [];
 
   for (const file of req.files) {
     if (file.type.startsWith("image/")) {
@@ -43,6 +44,9 @@ Respond ONLY with raw JSON matching the specified format. No markdown fences, no
         type: "document",
         source: { type: "base64", media_type: "application/pdf", data: base64 },
       } as Messages.DocumentBlockParam);
+    } else if (file.extractedText) {
+      // DWG / DXF: send the parsed text extracted client-side
+      cadTextBlocks.push({ type: "text", text: file.extractedText });
     }
   }
 
@@ -50,6 +54,7 @@ Respond ONLY with raw JSON matching the specified format. No markdown fences, no
     textBlock,
     ...imageBlocks,
     ...(documentBlocks as unknown as Messages.ContentBlockParam[]),
+    ...cadTextBlocks,
   ];
 
   return { role: "user", content };

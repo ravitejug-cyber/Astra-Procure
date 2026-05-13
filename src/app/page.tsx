@@ -1,11 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
-import { BarChart3, History, Loader2, Send, Zap, Factory } from "lucide-react";
+import { BarChart3, History, Loader2, Send, Zap, Factory, Cpu } from "lucide-react";
 import { FileUploader } from "@/components/FileUploader";
 import { CostingResult } from "@/components/CostingResult";
 import { ProjectHistory } from "@/components/ProjectHistory";
 import { VendorDashboard } from "@/components/VendorDashboard";
+import { PCBAnalyzer } from "@/components/PCBAnalyzer";
 import { Button } from "@/components/ui/button";
 import { Select } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
@@ -21,7 +22,7 @@ import type {
 } from "@/lib/types";
 import type { DiscoveryRequest } from "@/lib/vendorTypes";
 
-type Tab = "analyze" | "history" | "vendors";
+type Tab = "analyze" | "history" | "vendors" | "pcb";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<Tab>("analyze");
@@ -88,7 +89,6 @@ export default function Home() {
         result: costResult,
         notes: notes || undefined,
       });
-      setActiveTab("vendors");
     } catch (err) {
       setError(err instanceof Error ? err.message : "An unexpected error occurred.");
     } finally {
@@ -105,9 +105,10 @@ export default function Home() {
   };
 
   const tabConfig: { key: Tab; label: string; icon: React.ReactNode }[] = [
-    { key: "analyze", label: "analyze", icon: <BarChart3 className="h-3.5 w-3.5" /> },
-    { key: "history", label: "history", icon: <History className="h-3.5 w-3.5" /> },
-    { key: "vendors", label: "vendors", icon: <Factory className="h-3.5 w-3.5" /> },
+    { key: "analyze", label: "Costing", icon: <BarChart3 className="h-3.5 w-3.5" /> },
+    { key: "pcb", label: "PCB", icon: <Cpu className="h-3.5 w-3.5" /> },
+    { key: "history", label: "History", icon: <History className="h-3.5 w-3.5" /> },
+    { key: "vendors", label: "Vendors", icon: <Factory className="h-3.5 w-3.5" /> },
   ];
 
   return (
@@ -262,6 +263,10 @@ export default function Home() {
               )}
             </div>
           </div>
+        )}
+
+        {activeTab === "pcb" && (
+          <PCBAnalyzer />
         )}
 
         {activeTab === "history" && (

@@ -4,6 +4,7 @@ import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { Upload, X, FileText, Image, File } from "lucide-react";
 import { cn, formatFileSize } from "@/lib/utils";
+import { extractCadText, detectCadType } from "@/lib/cadParser";
 import type { UploadedFile } from "@/lib/types";
 
 interface FileUploaderProps {
@@ -19,12 +20,17 @@ const ACCEPTED_TYPES: Record<string, string[]> = {
   "image/gif": [".gif"],
   "image/svg+xml": [".svg"],
   "application/dxf": [".dxf"],
-  "application/octet-stream": [".dxf", ".step", ".stp"],
+  "application/acad": [".dwg"],
+  "image/vnd.dwg": [".dwg"],
+  "image/vnd.dxf": [".dxf"],
+  "application/octet-stream": [".dxf", ".dwg", ".step", ".stp"],
 };
 
-function fileIcon(type: string) {
+function fileIcon(type: string, name: string) {
   if (type.startsWith("image/")) return <Image className="h-4 w-4 text-blue-500" />;
   if (type === "application/pdf") return <FileText className="h-4 w-4 text-red-500" />;
+  const ext = name.split(".").pop()?.toLowerCase();
+  if (ext === "dwg" || ext === "dxf") return <File className="h-4 w-4 text-orange-500" />;
   return <File className="h-4 w-4 text-slate-500" />;
 }
 
@@ -52,12 +58,21 @@ export function FileUploader({ files, onChange }: FileUploaderProps) {
         return;
       }
       const converted = await Promise.all(
-        accepted.map(async (f) => ({
-          name: f.name,
-          type: f.type || "application/octet-stream",
-          size: f.size,
-          dataUrl: await toDataUrl(f),
-        }))
+        accepted.map(async (f) => {
+          const mimeType = f.type || "application/octet-stream";
+          const cadType = detectCadType(f.name, mimeType);
+          const [dataUrl, extractedText] = await Promise.all([
+            toDataUrl(f),
+            cadType !== "other" ? extractCadText(f) : Promise.resolve(null),
+          ]);
+          return {
+            name: f.name,
+            type: mimeType,
+            size: f.size,
+            dataUrl,
+            ...(extractedText ? { extractedText } : {}),
+          } as UploadedFile;
+        })
       );
       onChange([...files, ...converted]);
     },
@@ -98,7 +113,7 @@ export function FileUploader({ files, onChange }: FileUploaderProps) {
               {isDragActive ? "Drop files here..." : "Drag & drop files, or click to browse"}
             </p>
             <p className="mt-1 text-xs text-slate-400">
-              PDF, DXF, STEP, JPG, PNG - up to 20 MB each, max 10 files
+              PDF, DWG, DXF, STEP, JPG, PNG - up to 20 MB each, max 10 files
             </p>
           </div>
         </div>
@@ -114,7 +129,7 @@ export function FileUploader({ files, onChange }: FileUploaderProps) {
         <ul className="space-y-2">
           {files.map((f, i) => (
             <li key={i} className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2">
-              {fileIcon(f.type)}
+              {fileIcon(f.type, f.name)}
               <div className="flex-1 min-w-0">
                 <p className="truncate text-sm text-slate-700 font-medium">{f.name}</p>
                 <p className="text-xs text-slate-400">{formatFileSize(f.size)}</p>
