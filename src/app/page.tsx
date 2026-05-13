@@ -105,7 +105,7 @@ export default function Home() {
   };
 
   const tabConfig: { key: Tab; label: string; icon: React.ReactNode }[] = [
-    { key: "analyze", label: "Costing", icon: <BarChart3 className="h-3.5 w-3.5" /> },
+    { key: "analyze", label: "Metal Costing", icon: <BarChart3 className="h-3.5 w-3.5" /> },
     { key: "pcb", label: "PCB", icon: <Cpu className="h-3.5 w-3.5" /> },
     { key: "history", label: "History", icon: <History className="h-3.5 w-3.5" /> },
     { key: "vendors", label: "Vendors", icon: <Factory className="h-3.5 w-3.5" /> },
