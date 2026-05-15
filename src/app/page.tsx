@@ -1,12 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
+import dynamic from "next/dynamic";
 import { BarChart3, History, Loader2, Send, Zap, Factory, Cpu } from "lucide-react";
 import { FileUploader } from "@/components/FileUploader";
-import { CostingResult } from "@/components/CostingResult";
-import { ProjectHistory } from "@/components/ProjectHistory";
-import { VendorDashboard } from "@/components/VendorDashboard";
-import { PCBAnalyzer } from "@/components/PCBAnalyzer";
 import { Button } from "@/components/ui/button";
 import { Select } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
@@ -21,6 +18,13 @@ import type {
   ProjectEntry,
 } from "@/lib/types";
 import type { DiscoveryRequest } from "@/lib/vendorTypes";
+
+// Lazy-load heavy tab components — each bundle is only downloaded when the
+// tab is first visited, keeping the initial page load fast.
+const CostingResult = dynamic(() => import("@/components/CostingResult").then((m) => ({ default: m.CostingResult })), { ssr: false });
+const ProjectHistory = dynamic(() => import("@/components/ProjectHistory").then((m) => ({ default: m.ProjectHistory })), { ssr: false });
+const VendorDashboard = dynamic(() => import("@/components/VendorDashboard").then((m) => ({ default: m.VendorDashboard })), { ssr: false });
+const PCBAnalyzer = dynamic(() => import("@/components/PCBAnalyzer").then((m) => ({ default: m.PCBAnalyzer })), { ssr: false });
 
 type Tab = "analyze" | "history" | "vendors" | "pcb";
 
