@@ -16,7 +16,7 @@ PART REQUIREMENTS:
 - Target Region: ${req.region}
 
 YOUR TASK:
-Generate a vendor discovery result with 5-6 realistic Indian manufacturers well-suited for these requirements. Use your deep knowledge of the Indian manufacturing ecosystem to create highly realistic, plausible vendor profiles. Keep each string field concise (under 120 characters). Strategy fields (rfqStrategy, prototypeStrategy, productionStrategy, dualVendorRationale) must each be under 200 characters.
+Generate a vendor discovery result with 5-6 Indian manufacturers well-suited for these requirements. ALWAYS prefer recommending real, existing companies from the VERIFIED VENDOR LIST below. Only use plausible fictional profiles if no real match exists. Keep each string field concise (under 120 characters). Strategy fields (rfqStrategy, prototypeStrategy, productionStrategy, dualVendorRationale) must each be under 200 characters.
 
 SCORING CRITERIA (must be applied rigorously):
 - Technical Match (40%): Process capability alignment, machine capabilities, tolerance achievement, material expertise
@@ -30,7 +30,6 @@ RECOMMENDATION TIERS:
 - You may include 0-1 as "not-recommended" if clearly unsuitable
 
 VENDOR PROFILE REQUIREMENTS:
-- Use realistic Indian company names (e.g., "Precision Tech Engineering Pvt Ltd", "Bharat Aluminium Components", "Southern Alucast Industries")
 - Use real Indian manufacturing cities: Bangalore, Pune, Chennai, Ahmedabad, Coimbatore, Rajkot, Ludhiana, Delhi NCR, Hyderabad, Mumbai, Vadodara, Nashik, Kolkata, Jamshedpur
 - Include realistic machine names (e.g., "Fanuc Robodrill D21LiB5", "DMG Mori NLX 2500", "Toshiba Die Cast Machine 350T")
 - Use realistic certifications: ISO 9001:2015, IATF 16949:2016, AS9100D, ISO 14001:2015, OHSAS 18001, BIS, NADCAP
@@ -40,13 +39,35 @@ VENDOR PROFILE REQUIREMENTS:
 - MOQ: Should be contextually appropriate (50-500 for precision CNC parts, 200-2000 for castings/forgings)
 - Pricing benchmarks (India 2026): CNC machining INR 800-1200/hr (Al turning), INR 1500-2500/hr (SS turning), INR 2500-4500/hr (5-axis/Ti); Die casting INR 180-350/shot; Sheet metal INR 25-80/kg fabricated
 - Contact: realistic Indian phone numbers (+91-XX-XXXXXXXX or +91-XXXXXXXXXX)
-- Website: plausible Indian business domain (e.g., "www.precisiontechpune.com")
 
-KNOWN REAL INDIAN MANUFACTURERS - prefer recommending these when they match requirements:
-CNC MACHINING: Craftsman Automation Ltd (Coimbatore, IATF 16949, AS9100D, www.craftsmanautomation.com), Precitech Engineering Pvt Ltd (Pune, IATF 16949, www.precitechpune.com), GRS Engineering Pvt Ltd (Rajkot, IATF 16949, www.grsengineering.in), Zetwerk Manufacturing (Bangalore, ISO 9001, www.zetwerk.com)
-DIE CASTING: Endurance Technologies Ltd (Aurangabad, IATF 16949, www.endurancegroup.com), Rockman Industries Ltd (Ludhiana, IATF 16949, www.rockmanindustries.com), Rico Auto Industries Ltd (Gurugram, IATF 16949, www.ricoauto.com), Roots Cast Pvt Ltd (Rajkot, ISO 9001, www.rootscast.com)
-SHEET METAL/FABRICATION: Sira Industries Pvt Ltd (Pune, ISO 9001, www.siraindustries.com), Fabrimech Engineers Pvt Ltd (Chennai, EN15085 ISO 9001, www.fabrimech.com), Cyclotron Industries (Pune, ISO 9001, www.cyclotronindustries.com)
-FORGING: Bharat Forge Ltd (Pune, AS9100D NADCAP IATF 16949, www.bharatforge.com), MM Forgings Ltd (Chennai, IATF 16949, www.mmforgings.com), Emerson Forge Pvt Ltd (Rajkot, ISO 9001, www.emersonforge.com)
+VERIFIED REAL INDIAN MANUFACTURERS (use actual details below — these are real companies):
+CNC MACHINING:
+- Craftsman Automation Ltd | Coimbatore, Tamil Nadu | IATF 16949, AS9100D | 500+ VMC/HMC | auto/aerospace/defence | est.1986 | www.craftsmanautomation.com
+- Maini Precision Products Ltd | Bangalore, Karnataka | IATF 16949, AS9100D, NADCAP, ISO 14001, ISO 45001 | 696 CNC machines, 11 plants | auto/aerospace | est.1973 | www.mainiprecisionproducts.com
+- Spacenex | Devanahalli, Bangalore, Karnataka | AS9100D | 5-axis CNC, NDT, chemical processing | aerospace/defence/space | est.2010 | www.spacenex.com
+- Precitech Engineering Pvt Ltd | Pune, Maharashtra | IATF 16949 | CNC turning, milling, grinding | auto/defence/industrial | www.precitechpune.com
+- GRS Engineering Pvt Ltd | Rajkot, Gujarat | IATF 16949 | multi-axis CNC, auto/industrial | www.grsengineering.in
+- Zetwerk Manufacturing | Bangalore, Karnataka | ISO 9001 | CNC, sheet metal, casting, on-demand | multi-industry | est.2018 | www.zetwerk.com
+
+DIE CASTING:
+- Endurance Technologies Ltd | Aurangabad, Maharashtra | IATF 16949 | Al/Mg HPDC, machining | auto OEMs | est.1985 | www.endurancegroup.com
+- Rockman Industries Ltd | Ludhiana, Punjab | IATF 16949 | Al HPDC, machining, surface treatment | auto | est.1960 | www.rockmanindustries.com
+- Rico Auto Industries Ltd | Gurugram, Haryana | IATF 16949 | Al/Zn die casting, precision machining | auto/2-wheeler | est.1983 | www.ricoauto.com
+- Renuka Auto Components | Pune, Maharashtra | IATF 16949:2016, ISO 9001:2015 | Al gravity/pressure die casting | auto | www.renukagroup.in
+- Roots Cast Pvt Ltd | Rajkot, Gujarat | ISO 9001 | Al gravity/pressure die casting | auto/industrial | www.rootscast.com
+- Sadguru Auto Components | Pune, Maharashtra | ISO 9001 | 1500+ tonnes/year Al die casting | auto/industrial | www.sadgurudiecast.com
+
+SHEET METAL / FABRICATION:
+- Sira Industries Pvt Ltd | Pune, Maharashtra | ISO 9001 | laser cutting, CNC press brake, welding, enclosures | auto/electronics | www.siraindustries.com
+- Fabrimech Engineers Pvt Ltd | Chennai, Tamil Nadu | EN15085, ISO 9001 | heavy fabrication, structural weldments | rail/industrial | www.fabrimech.com
+- Cyclotron Industries | Pune, Maharashtra | ISO 9001 | sheet metal, CNC press brake, laser cutting | auto/electronics | www.cyclotronindustries.com
+
+FORGING:
+- Bharat Forge Ltd | Pune, Maharashtra | AS9100D, NADCAP, IATF 16949 | closed-die forging up to 12,500T | auto/aero/defence/oil&gas | est.1961 | www.bharatforge.com
+- Happy Forgings Ltd | Ludhiana, Punjab | IATF 16949, AS9100D | 120,000 tonnes/year capacity | auto/farm/oil&gas/wind | est.1979 | www.happyforgingsltd.com
+- Ramkrishna Forgings Ltd | Kolkata, West Bengal | IATF 16949 | auto/railways/oil&gas forgings | est.1981 | +91-33-4082-0900 | www.ramkrishnaforgings.com
+- MM Forgings Ltd | Chennai, Tamil Nadu | IATF 16949 | closed-die steel/alloy forgings | auto/commercial vehicles | www.mmforgings.com
+- Emerson Forge Pvt Ltd | Rajkot, Gujarat | ISO 9001 | open/closed-die forgings, flanges | auto/industrial/oil&gas | www.emersonforge.com
 
 RESPOND ONLY WITH VALID JSON - NO MARKDOWN FENCES, NO EXTRA TEXT, NO EXPLANATIONS.
 

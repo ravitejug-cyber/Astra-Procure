@@ -139,19 +139,20 @@ RESPOND ONLY WITH VALID JSON - NO MARKDOWN FENCES, NO EXTRA TEXT.
   "rawMarkdown": "string"
 }
 
-REAL INDIAN PCB MANUFACTURERS - use these for recommendedIndianVendors (actual existing companies):
+VERIFIED REAL INDIAN PCB MANUFACTURERS (use for recommendedIndianVendors — actual existing companies with confirmed details):
 PCB FABRICATION:
-- PCB Power Market Pvt Ltd, Gandhinagar, Gujarat - UL listed, ISO 9001, IPC-A-600; standard to 10L boards, quick turn 24-48hr; www.pcbpower.com
-- AT&S India Pvt Ltd, Nanjangud, Karnataka - IATF 16949, ISO 14001, IPC Class 2/3; HDI, impedance control, automotive grade; www.ats.net
-- Genus Electrotech Ltd, Gandhidham, Gujarat - IATF 16949; multilayer PCBs up to 20L, auto/industrial; www.genuselectrotech.com
-- Fine-Line Circuits Pvt Ltd, Bangalore - ISO 9001, ISO 13485; HDI, flex-rigid, medical/aerospace; www.finelinecircuits.in
-- Shogini Technoarts Pvt Ltd, Pune - ISO 9001; multilayer, controlled impedance, SMT PCBs; www.shogini.com
-- CIPSA-TEC India Pvt Ltd, Bangalore - ISO 9001; standard multilayer, quick-turn prototype; www.cipsatec.com
+- PCB Power Market Pvt Ltd | Gandhinagar, Gujarat | ISO 9001:2015, ISO 13485:2016, UL, IPC-A-600 | prototype to production, multilayer up to 14L, HDI, RF, flex, impedance control, quick-turn 24-48hr | auto/industrial/telecom | www.pcbpower.com
+- AT&S India Pvt Ltd | Nanjangud, Karnataka | IATF 16949, ISO 14001, IPC Class 2/3 | high-end HDI, IC substrates, impedance control, automotive grade multilayer | auto/aero/telecom | est.2009 | www.ats.net
+- Hi-Q Electronics Pvt Ltd | Hosur, Tamil Nadu (near Bangalore) | IPC Class 3/3A | up to 38-layer multilayer, laser-drilled stacked microvia HDI, flex-rigid, prototype and small batch | aerospace/defence/space | est.1978 | www.hiqelectronics.com
+- Genus Electrotech Ltd | Gandhidham, Gujarat | IATF 16949 | multilayer PCBs up to 20L, automotive/industrial grade | auto/industrial | www.genuselectrotech.com
+- Fine-Line Circuits Pvt Ltd | Bangalore, Karnataka | ISO 9001, ISO 13485 | HDI, flex-rigid, impedance control, medical/aerospace PCBs | medical/aero/defence | www.finelinecircuits.in
+- Shogini Technoarts Pvt Ltd | Pune, Maharashtra | ISO 9001, IATF 16949 | LED PCB, metal-core, single/double/multilayer, controlled impedance | auto/industrial/LED | www.shogini.com
+- CIPSA-TEC India Pvt Ltd | Bangalore, Karnataka | ISO 9001:2015, ISO 14001, TS 16949 | single/double/multilayer, rigid/flex/rigid-flex, quick-turn prototype | industrial/auto/telecom | www.cipsatec.com
 PCBA / ASSEMBLY:
-- VVDN Technologies Pvt Ltd, Manesar, Gurugram - ISO 9001, ISO 14001; SMT/THT, BGA, full box build, IoT/telecom; www.vvdntech.com
-- Syrma SGS Technology Ltd, Chennai - ISO 13485, IATF 16949; SMT/THT, medical/auto/defence PCBA; www.syrmasgstechnology.com
-- Circuit Systems India Ltd, Bangalore - ISO 9001; SMT/THT assembly, EMS, industrial/telecom; www.circuitsystems.in
-- Mefron Technologies Pvt Ltd, Ahmedabad - ISO 9001; SMT PCBA, prototype to production, industrial; www.mefron.com`;
+- VVDN Technologies Pvt Ltd | Manesar, Gurugram, Haryana | ISO 9001, ISO 14001 | SMT/THT, BGA, full box build, NPI, IoT/telecom/networking PCBA | IoT/telecom/networking | www.vvdntech.com
+- Syrma SGS Technology Ltd | Chennai, Tamil Nadu | ISO 9001, ISO 13485, IATF 16949, ISO 14001, ISO 45001, ANSI/ESD S20.20 | SMT/THT, BGA, AOI, 3D X-ray, ATE; 120,000 sqft flagship Chennai facility | medical/auto/defence/industrial | www.syrmasgs.com
+- Circuit Systems India Ltd | Bangalore, Karnataka | ISO 9001 | SMT/THT assembly, EMS, industrial/telecom PCBA | industrial/telecom/electronics | www.circuitsystems.in
+- Mefron Technologies Pvt Ltd | Ahmedabad, Gujarat | ISO 9001 | SMT PCBA, prototype to production, industrial electronics | industrial/energy/electronics | www.mefron.com`;
 
 export function buildPCBPrompt(input: PCBAnalysisInput): string {
   const sf = input.specialFeatures;
