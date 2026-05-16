@@ -26,12 +26,17 @@ ${req.material ? `IMPORTANT: The user has explicitly specified the raw material 
 Respond ONLY with raw JSON matching the specified format. No markdown fences, no extra text.`,
   };
 
+  const CLAUDE_IMAGE_TYPES = new Set(["image/jpeg", "image/png", "image/gif", "image/webp"]);
+
   const imageBlocks: Messages.ImageBlockParam[] = [];
   const documentBlocks: Messages.DocumentBlockParam[] = [];
   const cadTextBlocks: Messages.TextBlockParam[] = [];
 
   for (const file of req.files) {
-    if (file.type.startsWith("image/")) {
+    // CAD files (DWG/DXF) come with extractedText — always send as text, never as image
+    if (file.extractedText) {
+      cadTextBlocks.push({ type: "text", text: file.extractedText });
+    } else if (CLAUDE_IMAGE_TYPES.has(file.type)) {
       const mediaType = file.type as "image/jpeg" | "image/png" | "image/gif" | "image/webp";
       const base64 = file.dataUrl.split(",")[1];
       imageBlocks.push({
@@ -44,10 +49,8 @@ Respond ONLY with raw JSON matching the specified format. No markdown fences, no
         type: "document",
         source: { type: "base64", media_type: "application/pdf", data: base64 },
       } as Messages.DocumentBlockParam);
-    } else if (file.extractedText) {
-      // DWG / DXF: send the parsed text extracted client-side
-      cadTextBlocks.push({ type: "text", text: file.extractedText });
     }
+    // Unknown types (application/octet-stream, image/vnd.dwg, etc.) are silently skipped
   }
 
   const content: Messages.ContentBlockParam[] = [
