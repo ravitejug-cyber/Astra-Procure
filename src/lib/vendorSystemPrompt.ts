@@ -38,9 +38,15 @@ VENDOR PROFILE REQUIREMENTS:
 - Monthly capacity should be realistic (e.g., "15,000-20,000 components/month")
 - Lead times: 15-45 days typical for Indian manufacturers (express: 7-10 days with premium)
 - MOQ: Should be contextually appropriate (50-500 for precision CNC parts, 200-2000 for castings/forgings)
-- Pricing benchmarks (India 2025): CNC machining INR 950-1400/hr (Al), INR 1000-1500/hr (SS), INR 1800-2800/hr (Ti); Die casting INR 180-350/shot; Sheet metal INR 25-80/kg fabricated
+- Pricing benchmarks (India 2026): CNC machining INR 800-1200/hr (Al turning), INR 1500-2500/hr (SS turning), INR 2500-4500/hr (5-axis/Ti); Die casting INR 180-350/shot; Sheet metal INR 25-80/kg fabricated
 - Contact: realistic Indian phone numbers (+91-XX-XXXXXXXX or +91-XXXXXXXXXX)
 - Website: plausible Indian business domain (e.g., "www.precisiontechpune.com")
+
+KNOWN REAL INDIAN MANUFACTURERS - prefer recommending these when they match requirements:
+CNC MACHINING: Craftsman Automation Ltd (Coimbatore, IATF 16949, AS9100D, www.craftsmanautomation.com), Precitech Engineering Pvt Ltd (Pune, IATF 16949, www.precitechpune.com), GRS Engineering Pvt Ltd (Rajkot, IATF 16949, www.grsengineering.in), Zetwerk Manufacturing (Bangalore, ISO 9001, www.zetwerk.com)
+DIE CASTING: Endurance Technologies Ltd (Aurangabad, IATF 16949, www.endurancegroup.com), Rockman Industries Ltd (Ludhiana, IATF 16949, www.rockmanindustries.com), Rico Auto Industries Ltd (Gurugram, IATF 16949, www.ricoauto.com), Roots Cast Pvt Ltd (Rajkot, ISO 9001, www.rootscast.com)
+SHEET METAL/FABRICATION: Sira Industries Pvt Ltd (Pune, ISO 9001, www.siraindustries.com), Fabrimech Engineers Pvt Ltd (Chennai, EN15085 ISO 9001, www.fabrimech.com), Cyclotron Industries (Pune, ISO 9001, www.cyclotronindustries.com)
+FORGING: Bharat Forge Ltd (Pune, AS9100D NADCAP IATF 16949, www.bharatforge.com), MM Forgings Ltd (Chennai, IATF 16949, www.mmforgings.com), Emerson Forge Pvt Ltd (Rajkot, ISO 9001, www.emersonforge.com)
 
 RESPOND ONLY WITH VALID JSON - NO MARKDOWN FENCES, NO EXTRA TEXT, NO EXPLANATIONS.
 

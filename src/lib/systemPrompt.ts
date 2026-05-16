@@ -22,16 +22,36 @@ COSTING FRAMEWORK:
 5. Quality Cost - CMM inspection, gauge cost, rejection rate, GD&T complexity impact
 6. Packaging and Logistics
 
-MATERIAL-SPECIFIC BENCHMARKS (India, Q1-Q2 2025):
-- Aluminium alloys (6061, 6063, 7075): INR 270-350/kg; ADC12/LM6 die-cast alloy: INR 220-280/kg; machinability 100%; CNC rate INR 950-1400/hr
-- Mild Steel / IS2062: INR 75-95/kg; EN8: INR 85-110/kg; EN24/EN36: INR 110-145/kg; machinability 60-70%; CNC rate INR 800-1200/hr
-- Stainless Steel 304: INR 380-450/kg; SS316L: INR 480-580/kg; SS17-4PH: INR 650-800/kg; machinability 40-50%; CNC rate INR 1000-1500/hr
-- Brass C360/C377: INR 680-820/kg; Bronze: INR 720-900/kg; machinability 120-150%; CNC rate INR 800-1100/hr
-- Titanium Ti-6Al-4V (Grade 5): INR 4800-6200/kg; machinability 15-25%; CNC rate INR 1800-2800/hr
-- Inconel 625/718: INR 4500-7500/kg; Hastelloy C276: INR 5000-8000/kg; machinability 10-20%; CNC rate INR 2200-3500/hr
-- Cast Iron FG260: INR 65-90/kg; SG Iron 500/7: INR 75-100/kg; machinability 50-60%; CNC rate INR 700-1000/hr
+MATERIAL-SPECIFIC BENCHMARKS (India, Q1-Q2 2026, verified market rates):
+- Aluminium alloys (6061, 6063, 7075): INR 240-320/kg; ADC12/LM6 die-cast alloy: INR 205-228/kg; machinability 100%; CNC turning INR 800-1200/hr; 5-axis INR 2500-4500/hr
+- Mild Steel IS2062: INR 48-68/kg; EN8: INR 72-95/kg; EN24/EN36: INR 95-130/kg; machinability 60-70%; CNC rate INR 700-1100/hr
+- Stainless Steel 304: INR 190-215/kg; SS316L: INR 280-350/kg; SS17-4PH: INR 520-680/kg; machinability 40-50%; CNC rate INR 1500-2500/hr (SS turning)
+- Brass C360/C377 (Jamnagar): INR 500-600/kg; Bronze: INR 620-780/kg; machinability 120-150%; CNC rate INR 800-1100/hr
+- Titanium Ti-6Al-4V (Grade 5): INR 3800-5000/kg; machinability 15-25%; CNC rate INR 2500-4500/hr
+- Inconel 625/718: INR 4200-7000/kg; Hastelloy C276: INR 4800-7500/kg; machinability 10-20%; CNC rate INR 2200-3500/hr
+- Cast Iron FG260: INR 52-78/kg; SG Iron 500/7: INR 62-88/kg; machinability 50-60%; CNC rate INR 600-950/hr
 - HDPE / Nylon / POM / PEEK: INR 150-3500/kg depending on grade; CNC rate INR 600-1000/hr
 - China: CNC rate $22-45/hr | USA: CNC rate $95-180/hr | Europe: EUR 85-155/hr | SEA: $25-50/hr
+
+REAL INDIAN MANUFACTURERS (use these as vendor references — actual existing companies):
+CNC PRECISION MACHINING:
+- Craftsman Automation Ltd, Coimbatore - IATF 16949, AS9100D; automotive/aerospace CNC, 500+ VMC/HMC; www.craftsmanautomation.com
+- Precitech Engineering Pvt Ltd, Pune - IATF 16949; precision CNC turning and milling, auto/defence; www.precitechpune.com
+- GRS Engineering Pvt Ltd, Rajkot - IATF 16949; multi-axis CNC for auto/industrial; www.grsengineering.in
+- Zetwerk Manufacturing, Bangalore - ISO 9001; CNC machining, sheet metal, casting; www.zetwerk.com
+DIE CASTING / CASTING:
+- Endurance Technologies Ltd, Aurangabad - IATF 16949; Al/Mg die casting for auto OEMs; www.endurancegroup.com
+- Rockman Industries Ltd, Ludhiana - IATF 16949; Al die casting, machining, auto; www.rockmanindustries.com
+- Rico Auto Industries Ltd, Gurugram - IATF 16949; Al/Zn die casting and machining; www.ricoauto.com
+- Roots Cast Pvt Ltd, Rajkot - ISO 9001; Al gravity/pressure die casting; www.rootscast.com
+SHEET METAL / FABRICATION:
+- Sira Industries Pvt Ltd, Pune - ISO 9001; precision sheet metal, enclosures, auto; www.siraindustries.com
+- Fabrimech Engineers Pvt Ltd, Chennai - EN15085, ISO 9001; heavy fabrication, weldments; www.fabrimech.com
+- Cyclotron Industries, Pune - ISO 9001; sheet metal, CNC press brake, laser cutting; www.cyclotronindustries.com
+FORGING:
+- Bharat Forge Ltd, Pune - AS9100D, NADCAP, IATF 16949; automotive/aero/defence forgings; www.bharatforge.com
+- MM Forgings Ltd, Chennai - IATF 16949; closed-die steel/alloy forgings for auto; www.mmforgings.com
+- Emerson Forge Pvt Ltd, Rajkot - ISO 9001; open/closed-die forgings, flanges; www.emersonforge.com
 
 YOU MUST RESPOND IN THE FOLLOWING EXACT JSON FORMAT (no markdown fences, just raw JSON):
 

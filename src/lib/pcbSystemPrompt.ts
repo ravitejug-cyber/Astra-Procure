@@ -12,9 +12,9 @@ ANALYSIS SCOPE:
 5. Yield Prediction - based on layer count, via type, IPC class, trace density
 6. Costing - separate fabrication and assembly cost breakdowns
 7. Process Recommendations - SMT process type, reflow profile, inspection requirements
-8. Vendor Recommendations - realistic Indian PCB/PCBA manufacturers
+8. Vendor Recommendations - real, existing Indian PCB/PCBA manufacturers from the reference list below
 
-PCB COSTING FRAMEWORK (India Q1-Q2 2025):
+PCB COSTING FRAMEWORK (India Q1-Q2 2026, verified market rates):
 FABRICATION (per board, at qty 100, per 100cm2 board area):
 - 1-2L FR4 standard: INR 35-100/board
 - 4L FR4 standard: INR 150-320/board
@@ -129,7 +129,7 @@ RESPOND ONLY WITH VALID JSON - NO MARKDOWN FENCES, NO EXTRA TEXT.
   "dfmRecommendations": ["string", "string", "string", "string", "string"],
   "costReductionIdeas": ["string", "string", "string", "string"],
   "recommendedIndianVendors": [
-    "string (vendor name, city, specialty, certifications)",
+    "string (real vendor name, city, website, specialty, certifications - choose from known real manufacturers)",
     "string",
     "string"
   ],
@@ -137,7 +137,21 @@ RESPOND ONLY WITH VALID JSON - NO MARKDOWN FENCES, NO EXTRA TEXT.
   "confidenceLevel": "High|Medium|Low",
   "confidenceExplanation": "string",
   "rawMarkdown": "string"
-}`;
+}
+
+REAL INDIAN PCB MANUFACTURERS - use these for recommendedIndianVendors (actual existing companies):
+PCB FABRICATION:
+- PCB Power Market Pvt Ltd, Gandhinagar, Gujarat - UL listed, ISO 9001, IPC-A-600; standard to 10L boards, quick turn 24-48hr; www.pcbpower.com
+- AT&S India Pvt Ltd, Nanjangud, Karnataka - IATF 16949, ISO 14001, IPC Class 2/3; HDI, impedance control, automotive grade; www.ats.net
+- Genus Electrotech Ltd, Gandhidham, Gujarat - IATF 16949; multilayer PCBs up to 20L, auto/industrial; www.genuselectrotech.com
+- Fine-Line Circuits Pvt Ltd, Bangalore - ISO 9001, ISO 13485; HDI, flex-rigid, medical/aerospace; www.finelinecircuits.in
+- Shogini Technoarts Pvt Ltd, Pune - ISO 9001; multilayer, controlled impedance, SMT PCBs; www.shogini.com
+- CIPSA-TEC India Pvt Ltd, Bangalore - ISO 9001; standard multilayer, quick-turn prototype; www.cipsatec.com
+PCBA / ASSEMBLY:
+- VVDN Technologies Pvt Ltd, Manesar, Gurugram - ISO 9001, ISO 14001; SMT/THT, BGA, full box build, IoT/telecom; www.vvdntech.com
+- Syrma SGS Technology Ltd, Chennai - ISO 13485, IATF 16949; SMT/THT, medical/auto/defence PCBA; www.syrmasgstechnology.com
+- Circuit Systems India Ltd, Bangalore - ISO 9001; SMT/THT assembly, EMS, industrial/telecom; www.circuitsystems.in
+- Mefron Technologies Pvt Ltd, Ahmedabad - ISO 9001; SMT PCBA, prototype to production, industrial; www.mefron.com`;
 
 export function buildPCBPrompt(input: PCBAnalysisInput): string {
   const sf = input.specialFeatures;
