@@ -14,28 +14,35 @@ ANALYSIS SCOPE:
 7. Process Recommendations - SMT process type, reflow profile, inspection requirements
 8. Vendor Recommendations - realistic Indian PCB/PCBA manufacturers
 
-PCB COSTING FRAMEWORK (India 2024-2026):
-FABRICATION:
-- 1-2L FR4 std: INR 25-80/board per 100cm2 at qty 100
-- 4L FR4: INR 120-280/board per 100cm2 at qty 100
-- 6L FR4: INR 350-650/board per 100cm2 at qty 100
-- 8L FR4: INR 700-1200/board per 100cm2 at qty 100
-- 10L: INR 1400-2200/board | 12L: INR 2500-4000/board
-- Rogers material: 3-5x FR4 surcharge
-- Polyimide/Flex: 4-8x FR4 surcharge
-- Aluminum: INR 80-200/board per 100cm2
-- ENIG surcharge: +15-25% | ENEPIG: +30-40% | Hard Gold: +40-60%
-- HDI/blind+buried vias: +40-80%
-- Controlled impedance: +10-20%
-- Gold fingers: +15-30%
-- IPC Class 3: +30-50%
-- Flying probe: INR 50-150/board | Flying probe + AOI: INR 100-250/board
+PCB COSTING FRAMEWORK (India Q1-Q2 2025):
+FABRICATION (per board, at qty 100, per 100cm2 board area):
+- 1-2L FR4 standard: INR 35-100/board
+- 4L FR4 standard: INR 150-320/board
+- 6L FR4 standard: INR 420-750/board
+- 8L FR4 standard: INR 850-1400/board
+- 10L FR4: INR 1700-2600/board | 12L FR4: INR 3000-4800/board
+- Rogers 4003C/4350B: 4-6x FR4 surcharge
+- Polyimide/Flex: 5-9x FR4 surcharge
+- Aluminum PCB: INR 100-250/board per 100cm2
+- High-Tg FR4 (170/180): +10-20% over standard FR4
+- ENIG surcharge: +18-28% | ENEPIG: +35-50% | Hard Gold: +50-70% | Immersion Silver: +10-18% | Immersion Tin: +8-15%
+- HDI/microvia (laser drill): +50-90%
+- Blind/buried vias: +35-65%
+- Controlled impedance: +12-22%
+- Gold fingers / edge connectors: +18-35%
+- IPC Class 3: +35-55%
+- Via-in-pad (filled/plated): +20-35%
+- Back drilling: +25-40%
+- Flying probe (E-Test): INR 70-180/board | Flying probe + AOI: INR 140-300/board | ICT: INR 200-500/board
 
-ASSEMBLY (SMT):
-- SMT placement: INR 1-3/component (simple), INR 3-8/component (BGA/fine-pitch)
-- THT insertion: INR 5-15/component
-- Double-sided assembly: +30-40%
-- BGA rework setup: INR 500-2000 NRE
+ASSEMBLY (SMT/THT, India 2025):
+- SMT placement: INR 2-4/component (0402 and above passive/IC), INR 5-12/component (BGA/QFN/fine-pitch)
+- THT insertion manual: INR 8-20/component | Auto-insertion: INR 4-10/component
+- Reflow soldering: INR 15-40/board | Wave solder: INR 20-50/board | Selective solder: INR 30-80/board
+- Double-sided SMT assembly: +35-50% over single-sided
+- BGA X-ray inspection: INR 80-200/board
+- Functional testing: INR 100-500/board depending on complexity
+- BGA rework setup NRE: INR 1000-4000
 
 COMPLEXITY SCORING (0-100):
 - Layer count: 1-2L=10pts, 4L=25pts, 6L=40pts, 8L=55pts, 10L+=70pts

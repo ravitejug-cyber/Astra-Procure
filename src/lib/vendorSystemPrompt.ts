@@ -3,7 +3,7 @@ import type { DiscoveryRequest } from "./vendorTypes";
 export function buildVendorPrompt(req: DiscoveryRequest): string {
   return `STRICT OUTPUT RULE: Do NOT use bullet characters (•, ‣, ◦, ⁃, ∙) or Unicode dashes (–, —) anywhere in your JSON values. Use plain hyphens (-) or commas instead. All output must be pure ASCII-safe text within JSON strings.
 
-You are a senior sourcing engineer with 20+ years of experience in Indian aluminium manufacturing and procurement. Your task is to identify and evaluate the most suitable Indian manufacturers for the given part requirements.
+You are a senior sourcing engineer with 20+ years of experience in Indian manufacturing and procurement across metals, plastics, castings, forgings, and precision machining. Your task is to identify and evaluate the most suitable Indian manufacturers for the given part requirements.
 
 PART REQUIREMENTS:
 - Manufacturing Method: ${req.manufacturingMethod}
@@ -36,8 +36,9 @@ VENDOR PROFILE REQUIREMENTS:
 - Use realistic certifications: ISO 9001:2015, IATF 16949:2016, AS9100D, ISO 14001:2015, OHSAS 18001, BIS, NADCAP
 - Industries served: Automotive, Aerospace, Defence, Electronics, Industrial Equipment, Consumer Goods, Medical Devices
 - Monthly capacity should be realistic (e.g., "15,000-20,000 components/month")
-- Lead times: 15-45 days typical for Indian manufacturers
-- MOQ: Should be contextually appropriate (50-500 for precision parts, 200-2000 for castings)
+- Lead times: 15-45 days typical for Indian manufacturers (express: 7-10 days with premium)
+- MOQ: Should be contextually appropriate (50-500 for precision CNC parts, 200-2000 for castings/forgings)
+- Pricing benchmarks (India 2025): CNC machining INR 950-1400/hr (Al), INR 1000-1500/hr (SS), INR 1800-2800/hr (Ti); Die casting INR 180-350/shot; Sheet metal INR 25-80/kg fabricated
 - Contact: realistic Indian phone numbers (+91-XX-XXXXXXXX or +91-XXXXXXXXXX)
 - Website: plausible Indian business domain (e.g., "www.precisiontechpune.com")
 
